@@ -42,11 +42,17 @@ app.get('/', (req, res)=> {
     res.sendFile(path.join(__dirname + '/public/index.html'));
 })
 app.post('/project.html', (req, res)=> {
-    console.log(req.body);
+    var projID = req.body.projID;
+    res.redirect('/' + projID + '/project');
+})
+
+app.get('/:id/project', (req, res)=>{
+
     res.sendFile(path.join(__dirname + '/public/project.html'));
 })
 
 app.get('/:id/taskList.json', (req, res)=> {
+    //with projectID it will search all the tasks that are associate with this projectID
     var searchID = req.params.id;
     console.log('its getting task in tasklist.json');
     var sql = 'SELECT taskID, empID, title, overview, startDate, finDate, estTime, totalTime, tags, status FROM projectmanagementdb.task WHERE projectID = ?';
@@ -131,9 +137,21 @@ app.get('/:id/tasks', (req, res)=> {
     })
 })
 app.get('/:id/projectEmp.json', (req, res)=> {
+    //using projectID in :id this function returns a list of employee working on the project
     var searchID = req.params.id;
-    var sql = 'SELECT empID, firstName, lastName FROM Employee';
-    mysqlConnection.query(sql, function(err, results, fields){
+    var sql = 'SELECT employee.empID, firstName, lastName from projectmanagementdb.employee left join projectmanagementdb.project_relation on project_relation.empID = employee.empID WHERE projectID = ? ';
+    mysqlConnection.query(sql, searchID,function(err, results, fields){
+        if(!err){
+            console.log(results);
+            res.json({data: results});
+        }
+    })
+})
+app.get('/:id/projectData.json', (req, res)=> {
+    //using projectID in :id to return that project dates
+    var searchID = req.params.id;
+    var sql = 'SELECT projectID, projectLead, timeTotal, title, overview, status, startDate, finDate, estTime, budget, current_balance FROM projectmanagementdb.project WHERE projectID = ? ';
+    mysqlConnection.query(sql, searchID,function(err, results, fields){
         if(!err){
             console.log(results);
             res.json({data: results});

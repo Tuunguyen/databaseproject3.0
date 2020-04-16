@@ -259,7 +259,7 @@ var loadProjView = function (){
 		  });
 	   })
 		.done(function() {
-			$.getJSON('json/projectEmps.json', function(js) { // return json of all employee tuples who work on selected project
+			$.getJSON('/' + id +'/projectEmp.json', function(js) { // return json of all employee tuples who work on selected project
 			  $.each( $("#projectBlock").children(".row").children().children("div"), function( n, task ){
 				$.each(js.data, function (m, emp){
 					if($($(task).children()[1]).attr("id") == emp.empID){
