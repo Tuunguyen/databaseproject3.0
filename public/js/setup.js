@@ -9,7 +9,7 @@ var checkLogIn = function () {
 	  if(js.data[0].empType == "admin"){
 	  }
 	  else if(js.data[0].empType == "pl"){
-		$( ".admin" ).remove();
+		//$( ".admin" ).remove();
 	  }
 	  else{
 		$( ".admin" ).remove();
@@ -229,8 +229,27 @@ var loadNewAcct = function (){
 
 		}
 		
+		$("#acctBlock").css("display", "block");
+};
+
+var loadAdmin = function (){
+	var arr = window.location.href.split("/");
+	var id = arr[arr.length-2];
+	hideAll(1);
+		/*if($("#newAcct").children().length == 0){
+			$.getJSON('/' + id +'/profile.json', function(js) { //return json of employee tuple from their id 
+                  $("#newAcct").append(
+				  '<form><label for="fname">First name:</label><br><input type="text" id="fname" name="fname" required><br><label for="mname">Middle name:</label><br><input type="text" id="mname" name="mname"><br><label for="lname">Last name:</label><br><input type="text" id="lname" name="lname" required><br><label for="deptID">Department ID:</label><br><input type="text" id="deptID" name="deptID" required><br><label for="payrate">Pay Rate: </label><br><input type="text" id="payrate" name="payrate" required><br><input type="radio" id="salary" name="salOrHour" value="Salary"><label for="Salary" required>Salary</label><br><input type="radio" id="hourly" name="salOrHour" value="Hourly"><label for="Hourly" required>Hourly</label><br><input type="submit" value="Submit"></form>');
+               })
+				  .fail( function(d, textStatus, error) {
+					console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+					})
+
+		}*/
+		
 		$("#adminBlock").css("display", "block");
 };
+
 
 var sendToProjectView = function(id){
 	$("#projID").attr("value", id);

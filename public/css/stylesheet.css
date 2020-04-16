@@ -135,3 +135,11 @@ li:hover {
 	position: absolute;
 	text-align: right;
 }
+table, th, td {
+  border: 1px solid black;
+}
+
+.topTable {
+	background: #afafaf;
+	color: white;
+}
