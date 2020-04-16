@@ -48,7 +48,7 @@ app.post('/project.html', (req, res)=> {
 
 app.get('/:id/taskList.json', (req, res)=> {
     var searchID = req.params.id;
-    console.log('its getting task');
+    console.log('its getting task in tasklist.json');
     var sql = 'SELECT taskID, empID, title, overview, startDate, finDate, estTime, totalTime, tags, status FROM projectmanagementdb.task WHERE projectID = ?';
     mysqlConnection.query(sql, [searchID], function(err, results, fields){
         if(!err){
@@ -121,8 +121,8 @@ app.get('/:id/home', (req, res)=> {
 })
 app.get('/:id/tasks', (req, res)=> {
     var searchID = req.params.id;
-    console.log('its getting task');
-    var sql = 'SELECT taskID, empID, title, overview, startDate, finDate, estTime, totalTime, tags, status FROM projectmanagementdb.Task WHERE empID = ?';
+    console.log('its getting task in tasks');
+    var sql = 'SELECT taskID, empID, title, overview, startDate, finDate, estTime, totalTime, tags, status FROM projectmanagementdb.task WHERE empID = ?';
     mysqlConnection.query(sql, [searchID], function(err, results, fields){
         if(!err){
             console.log(results);

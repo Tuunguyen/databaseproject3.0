@@ -3,6 +3,7 @@ var checkLogIn = function () {
 	var id = arr[arr.length-2];
 	$.getJSON('/' + id +'/profile.json', function(js) { //return json of employee tuple from their id 
 	  $('#id').attr("id", js.data[0].empID);
+	  $('#employeeID').attr("value", js.data[0].empID);
 	  $('#fName').html(js.data[0].firstName);
 	  $('#lName').html(js.data[0].lastName);
 	  if(js.data[0].empType == "admin"){
@@ -233,6 +234,7 @@ var hideAll = function (m){
 var loadProjView = function (){
 	var arr = window.location.href.split("/");
 	var id = arr[arr.length-2];
+	console.log(id);
 	$.getJSON('/' + id +'/taskList.json', function(js) { // return json of all task tuples with selected project id
 		  $.each( js.data, function( n, task ){
 			  var m = task.startDate.split('-');
