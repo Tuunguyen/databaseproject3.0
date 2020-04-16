@@ -255,7 +255,7 @@ var loadProjView = function (){
 	$.getJSON('/' + id +'/taskList.json', function(js) { // return json of all task tuples with selected project id
 		  $.each( js.data, function( n, task ){
 			  var m = task.startDate.split('-');
-			$("#" + task.status).append('<div class = "task" id = "' + task.taskID + '"onclick = "loadTask(' + task.taskID+ ')" ><h3>' + task.title + '</h3><p id = "' + task.empID + '"></p><p> Start Date: ' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + ' </p><p> Tags: ' + task.tags + ' </p></div>');
+			$("#" + task.status).append('<div class = "task" id = "' + task.taskID + '"onclick = "loadTask(&apos;' + task.taskID+ '&apos;)" ><h3>' + task.title + '</h3><p id = "' + task.empID + '"></p><p> Start Date: ' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + ' </p><p> Tags: ' + task.tags + ' </p></div>');
 		  });
 	   })
 		.done(function() {
@@ -292,9 +292,9 @@ var loadTask = function (div){
 	var arr = window.location.href.split("/");
 	var id = arr[arr.length-2];
 	if($("#taskBlock").css("display") == "none"){
-		$.getJSON('json/taskList.json', function(js) { // return json of all task tuples with selected project id
+		$.getJSON('/' + id + '/taskList.json', function(js) { // return json of all task tuples with selected project id
 				$.each( js.data, function(n, task) {
-					if(task.taskID == $(div).attr("id")){
+					if(task.taskID == div){
 						$("#title").attr("value",task.title); 
 						$("#overview2").html(task.overview);
 						$("#tags").attr("value",task.tags);
@@ -331,10 +331,10 @@ var loadMeetLog = function () {
 						var m = (meeting.date).split('-');
 						var date = new Date(m[0], m[1], m[2].substring(0,2));
 						if(today > date && !(today.getMonth() == date.getMonth() && today.getDate() == date.getDate() && today.getYear() == date.getYear())){
-							$("#meetingLog").append('<h2> Meeting on ' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + " at "+ m[2].substring(3) + '</h2><p>"' + meeting.notes + '"</p>');
+							$("#meetingLog").append('<h2> Meeting on ' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + " at "+ m[2].substring(3,8) + '</h2><p>"' + meeting.notes + '"</p>');
 						}
 						else{
-							$("#futureMeetings").append('<h2> Meeting on ' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + " at "+ m[2].substring(3) + '</h2>');
+							$("#futureMeetings").append('<h2> Meeting on ' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + " at "+ m[2].substring(3,8) + '</h2>');
 						}
 					});	
                })
