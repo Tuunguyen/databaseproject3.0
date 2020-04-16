@@ -155,7 +155,7 @@ app.get('/:id/profile.json', (req, res)=> {
 
 app.get('/:id/dueToday.json', (req, res)=> {
     var searchID = req.params.id;
-    var sql = 'SELECT taskID, projectID, title FROM projectmanagementdb.Task where';
+    var sql = 'SELECT taskID, projectID, finDate, title FROM Task';
     mysqlConnection.query(sql, searchID, function(err, results, fields){
         if(!err){
             console.log(results);
@@ -263,7 +263,6 @@ app.post('/login', (req, res)=>{
 
 
 app.get('/register', (req, res)=> {
-    console.log('wtf');
     res.render('register.ejs');
 })
 

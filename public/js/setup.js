@@ -10,7 +10,6 @@ var checkLogIn = function () {
 	  }
 	  else if(js.data[0].empType == "pl"){
 		$( ".admin" ).remove();
-		$( ".pl" ).remove();
 	  }
 	  else{
 		$( ".admin" ).remove();
@@ -53,8 +52,9 @@ var loadProfile = function (){
 	hideAll(1);
 		if($("#profileInfo").children().length == 0){
 			$.getJSON('/' + id +'/profile.json', function(js) { //return json of employee tuple from their id
+					var m = (js.data[0].datePayed).split('-');
                   $("#profileInfo").append(
-				  		'<p> Employee ID: ' + js.data[0].empID + '</p><p> Department ID: ' + js.data[0].deptID + ' </p><p> Pay Rate: $' + js.data[0].payrate + '</p><p> Pay Type: ' + hourOrSal(js.data[0].hourOrSal) + ' </p><p> Last Paycheck: ' + js.data[0].datePayed + '</p><ul> Lead for Projects:</ul>');
+				  		'<p> Employee ID: ' + js.data[0].empID + '</p><p> Department ID: ' + js.data[0].deptID + ' </p><p> Pay Rate: $' + js.data[0].payrate + '</p><p> Pay Type: ' + hourOrSal(js.data[0].hourOrSal) + ' </p><p> Last Paycheck: ' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + '</p><ul> Lead for Projects:</ul>');
                })
 			   	.done(function() {
 				  $.getJSON('/' + id +'/homeLoad.json', function(js) { //return json of array of project tuples where employee id is in employee id list
@@ -81,27 +81,42 @@ var loadProfile = function (){
 var loadDueToday = function (){
 	var arr = window.location.href.split("/");
 	var id = arr[arr.length-2];
+	var today = new Date();
+	var n = (today.toString()).split(" ");
+	var isEmpty = true;
 	hideAll(1);
 		if($("#dueToday").children().length == 0){
 			$.getJSON('/' + id +'/dueToday.json', function(js) { // return json with task tuples that match employee ID and also match the current date.
 					$.each( js.data, function( taskid, task){
-						if($("#dueToday").find("#"+ task.projectID).length == 0){
+						var m = (task.finDate).split('-');
+						var date = new Date(m[0], m[1], m[2].substring(0,2));
+						if($("#dueToday").find("#"+ task.projectID).length == 0 && today.getMonth() == date.getMonth() && today.getDate() == date.getDate() && today.getYear() == date.getYear()){
+							isEmpty = false;
 							$("#dueToday").append(
 							'<h2 onclick = "sendToProjectView(' + task.projectID + ')" ></h2><ul id = "' + task.projectID + '"></ul>');
 						}
-						$("#dueToday").find("#"+ task.projectID).append(
-						'<li id = "' + task.taskID + '">' + task.title + '</li>');
+						if(today.getMonth() == date.getMonth() && today.getDate() == date.getDate() && today.getYear() == date.getYear()){
+							$("#dueToday").find("#"+ task.projectID).append(
+							'<li id = "' + task.taskID + '">' + task.title + '</li>');
+						}
 					});	
+					if(isEmpty){
+						console.log(today.getDate().toString());
+						$("#dueToday").append(
+							'<p>No tasks due on today&apos;s date:'  + n[1] + " " + n[2] + ", " + n[3] + '</p>');
+					}
                })
 			   	.done(function() {
-				  $.getJSON('/' + id +'/homeLoad.json', function(js) {  //return json of array of project tuples where employee id is in employee id list
-					  $.each( js.data, function( id, project){
-						$($("#dueToday").find("#"+ project.projectID).prev()).html(project.title);
-					  });
-					})
-					.fail( function(d, textStatus, error) {
-						console.error("getJSON failed, status: " + textStatus + ", error: "+error)
-					})
+					if(!isEmpty){
+					  $.getJSON('/' + id +'/homeLoad.json', function(js) {  //return json of array of project tuples where employee id is in employee id list
+						  $.each( js.data, function( id, project){
+							$($("#dueToday").find("#"+ project.projectID).prev()).html(project.title);
+						  });
+						})
+						.fail( function(d, textStatus, error) {
+							console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+						})
+					}
 				  })
 				  .fail( function(d, textStatus, error) {
 					console.error("getJSON failed, status: " + textStatus + ", error: "+error)
@@ -119,16 +134,17 @@ var loadMeeting = function () {
 		if($("#meetingBlock").children().length == 5){
 			$.getJSON('/' + id + '/meetings.json', function(js) {  //return json of array of all meetings with employees ID inside its empID list ordered from oldest date to newest
 					var today = new Date();
-					$.each( js.data, function( n, meeting){
+					var n = (today.toString()).split(" ");
+					$.each( js.data, function( a, meeting){
 						var m = (meeting.date).split('-');
 						var date = new Date(m[0], m[1], m[2].substring(0,2));
-						if(today.getDate() == date.getDate()){
+						if(today.getMonth() == date.getMonth() && today.getDate() == date.getDate() && today.getYear() == date.getYear()){
 							$("#meetingsToday").append(
-							'<h3>' + m[2].substring(3) + '</h3><p>' + meeting.projectID + '</p>');
+							'<h3>' + m[2].substring(3, 8) + '</h3><p>' + meeting.projectID + '</p>');
 						}
 						else if(today < date){
 							$("#meetings").append(
-							'<h3>'+ m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + " at "+ m[2].substring(3) + '</h3><p>' + meeting.projectID + '</p>');
+							'<h3>'+ m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + " at "+ m[2].substring(3, 8) + '</h3><p>' + meeting.projectID + '</p>');
 						}
 					});	
                })
@@ -168,19 +184,20 @@ var loadFinances = function (){
 	var id = arr[arr.length-2];
 	hideAll(1);
 		if($("#finance").children().length == 0){
-			$.getJSON('/' + id +'homeLoad.json', function(js) {  //return json of array of project tuples where employee id is in employee id list
+			$.getJSON('/' + id +'/homeLoad.json', function(js) {  //return json of array of project tuples where employee id is in employee id list
 					$.each( js.data, function( n, project){
 						if($("#finance").find("#"+ project.projectID + "2").length == 0 & project.projectLead == $($("#profile").children()[0]).attr("id")){
 							$("#finance").append(
-							'<h2 onclick = "sendToProjectView(' + project.projectID + '2)" >' + project.title + '</h2><p>Budget: $' + project.budget + '</p><p>Current Balance: $' + project.current_balance + '</p><h3>Last 3 Transactions:</h3><div id = "' + project.projectID + '"></div><button type="submit" onclick = "new function(){$(&quot;#form-' + project.projectID + '&quot;).css(&quot;display&quot;, &quot;block&quot;);}">New Transaction</button><form id = "form-'+ project.projectID +'" style = "display: none;"><h3> New Project Transaction </h3><label for="pID">Project ID:</label><br><input type="text" id="pID" name="pID" value = "'+ project.projectID +'" readonly><br><label for="payID">Employee ID:</label><br><input type="text" id="payID" name="payID" value = "' + $("#profile").children("p").attr("id") + '" readonly><br><label for="amount">Amount: (use negative if withdrawl)</label><br><input type="text" id="amount" name="amount" required><br><label for="desc">Description:</label><br><textarea type="text" id="desc" name="desc" rows = 3 required></textarea><br><label for="dest">Destination: </label><br><input type="text" id="dest" name="dest" required><br><button type="submit">Submit</button></form>');
+							'<h2 onclick = "sendToProjectView(' + project.projectID + '2)" >' + project.title + '</h2><p>Budget: $' + project.budget + '</p><p>Current Balance: $' + project.current_balance + '</p><h3>Last 3 Transactions:</h3><div id = "' + project.projectID + '"></div><button type="submit" onclick = "new function(){$(&quot;#form-' + project.projectID + '&quot;).css(&quot;display&quot;, &quot;block&quot;);}">New Transaction</button><form id = "form-'+ project.projectID +'" style = "display: none;" action = "/newTrans" method = "post"><h3> New Project Transaction </h3><label for="pID">Project ID:</label><br><input type="text" id="pID" name="pID" value = "'+ project.projectID +'" readonly><br><label for="payID">Employee ID:</label><br><input type="text" id="payID" name="payID" value = "' + $("#profile").children("p").attr("id") + '" readonly><br><label for="amount">Amount: (use negative if withdrawl)</label><br><input type="text" id="amount" name="amount" required><br><label for="desc">Description:</label><br><textarea type="text" id="desc" name="desc" rows = 3 required></textarea><br><label for="dest">Destination: </label><br><input type="text" id="dest" name="dest" required><br><button type="submit">Submit</button></form>');
 						}
 					});	
                })
 			   	.done(function() {
 				  $.getJSON('/' + id +'json/finances.json', function(js) {  // return last 3 transactions for all projects where employee is a project lead
 					  $.each( js.data, function( id, trans){
+						var m = (trans.date).split('-');
 						$("#finance").find("#"+ trans.projectID).append(
-						'<li id = "' + trans.transID + '">' + trans.date + ' - $' + trans.amount + ': ' + trans.description + '</li>');
+						'<li id = "' + trans.transID + '">' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + ' - $' + trans.amount + ': ' + trans.description + '</li>');
 					  });
 					})
 					.fail( function(d, textStatus, error) {
@@ -313,7 +330,7 @@ var loadMeetLog = function () {
 					$.each( js.data, function( n, meeting){
 						var m = (meeting.date).split('-');
 						var date = new Date(m[0], m[1], m[2].substring(0,2));
-						if(today > date && !(today.getDate() == date.getDate())){
+						if(today > date && !(today.getMonth() == date.getMonth() && today.getDate() == date.getDate() && today.getYear() == date.getYear())){
 							$("#meetingLog").append('<h2> Meeting on ' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + " at "+ m[2].substring(3) + '</h2><p>"' + meeting.notes + '"</p>');
 						}
 						else{
