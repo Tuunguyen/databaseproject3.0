@@ -197,7 +197,7 @@ var loadFinances = function (){
 					  $.each( js.data, function( id, trans){
 						var m = (trans.date).split('-');
 						$("#finance").find("#"+ trans.projectID).append(
-						'<li id = "' + trans.transID + '">' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + ' - $' + trans.amount + ': ' + trans.description + '</li>');
+						'<li style = "pointer-events: none;" id = "' + trans.transID + '">' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + ' - $' + trans.amount + ': ' + trans.description + '</li>');
 					  });
 					})
 					.fail( function(d, textStatus, error) {
@@ -236,16 +236,106 @@ var loadAdmin = function (){
 	var arr = window.location.href.split("/");
 	var id = arr[arr.length-2];
 	hideAll(1);
-		/*if($("#newAcct").children().length == 0){
-			$.getJSON('/' + id +'/profile.json', function(js) { //return json of employee tuple from their id 
-                  $("#newAcct").append(
-				  '<form><label for="fname">First name:</label><br><input type="text" id="fname" name="fname" required><br><label for="mname">Middle name:</label><br><input type="text" id="mname" name="mname"><br><label for="lname">Last name:</label><br><input type="text" id="lname" name="lname" required><br><label for="deptID">Department ID:</label><br><input type="text" id="deptID" name="deptID" required><br><label for="payrate">Pay Rate: </label><br><input type="text" id="payrate" name="payrate" required><br><input type="radio" id="salary" name="salOrHour" value="Salary"><label for="Salary" required>Salary</label><br><input type="radio" id="hourly" name="salOrHour" value="Hourly"><label for="Hourly" required>Hourly</label><br><input type="submit" value="Submit"></form>');
-               })
+		if($("#empList").children().length == 1){
+			$.getJSON('/' + id +'/deptList', function(js) {
+				$.each( js.data, function( n, dept){
+                  $("#deptList").append(
+				  	'<tr><th>' + dept.deptID + '</th><th class = "empRename" >'+ dept.deptHead + '</th><th class = "empRename" id = "'+ dept.deptID +'-empList"></th><th class = "projRename" id = "'+ dept.deptID +'-projList"></th><th>$'+ dept.current_balance +'</th></tr>');
+				})
+            })
+				.done( function(){
+					$.getJSON('/' + id +'/deptProjRelation', function(js) {
+						$.each( js.data, function( n, dpRelation){
+						  $("#" + dpRelation.deptID + "-projList").html($("#" + dpRelation.deptID + "-projList").html() + dpRelation.projectID + ",");
+						})
+					})
+					.done( function(){
+							$.getJSON('/' + id +'/projList', function(js) {
+								$.each( js.data, function( n, project){
+									var a = (project.startDate).split('-');
+									var b = (project.finDate).split('-');
+									$.each( $(".projRename"), function( n, idHTML){
+										var newHTML = "";
+										$.each( $(idHTML).html().split(","), function( n, id){
+											if(id == project.projectID){
+												newHTML += project.title + ",";
+											}
+											else if($(idHTML).html().split(",").length != n+1){
+												newHTML += id + ",";
+											}
+										})
+										$(idHTML).html(newHTML)
+									})
+								  $("#projList").append(
+								'<tr><th>' + project.projectID + '</th><th> ' + project.title + '</th><th>' + project.deptID +'</th><th class = "empRename">'+ project.projectLead +'</th><th class = "empRename" id = "' + project.projectID + '-list"></th><th>'+ a[1] + "/" + a[2].substring(0,2) + "/" + a[0] +'</th><th>'+ b[1] + "/" + b[2].substring(0,2) + "/" + b[0] +'</th><th>$' + project.budget +'</th><th>$'+ project.current_balance +'</th><th>' + project.estTime + ' hrs.</th><th>' + project.timeTotal + ' hrs.</th><th>' + project.status + '</th></tr>');
+								})
+								$.each( $(".projRename"), function( n, idHTML){
+									$(idHTML).html($(idHTML).html().slice(0,-1));
+									$(idHTML).html($(idHTML).html().replace(/,/g,", "));
+								})
+								$("#projList").css("font-size","12px");
+							})
+							.done( function(){
+								$.getJSON('/' + id +'/deptEmpRelation', function(js) {
+									$.each( js.data, function( n, dpRelation){
+									  $("#" + dpRelation.deptID + "-empList").html($("#" + dpRelation.deptID + "-empList").html() + dpRelation.empID + ",");
+									})
+								})
+								.done( function(){
+									$.getJSON('/' + id +'/projRelation', function(js) {
+										$.each( js.data, function( n, dpRelation){
+										  $("#" + dpRelation.projectID + "-list").html($("#" + dpRelation.projectID + "-list").html() + dpRelation.empID + ",");
+										})
+									})
+									.done( function(){
+									$.getJSON('/' + id +'/empList', function(js) {
+											$.each( js.data, function( n, employee){
+												var c = employee.datePayed.split('-');
+												$.each( $(".empRename"), function( n, idHTML){
+													var newHTML = "";
+													$.each( $(idHTML).html().split(","), function( n, id){
+														if(id == employee.empID){
+															newHTML += employee.firstName + " " + employee.lastName + ",";
+														}
+														else if($(idHTML).html().split(",").length != n+1 || $(idHTML).html().split(",").length < 2){
+															newHTML += id + ",";
+														}
+													})
+													$(idHTML).html(newHTML);
+												})
+											  $("#empList").append(
+												'<tr><th>' + employee.firstName + '</th><th>' + employee.midName + '</th><th>' + employee.lastName + '</th><th class = "projList" id = "' + employee.employeeID + '-list"></th><th>$' + employee.payrate + '</th><th>' + hourOrSal(employee.hourOrSal) + '</th><th>' + c[1] + "/" + c[2].substring(0,2) + "/" + c[0] + '</th><th>' + employee.empID + '</th><th>' + employee.empType + '</th></tr>');
+											})
+											$.each( $(".empRename"), function( n, idHTML){
+												$(idHTML).html($(idHTML).html().slice(0,-1));
+												$(idHTML).html($(idHTML).html().replace(/,/g,", "));
+											})
+										})
+									  .fail( function(d, textStatus, error) {
+										console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+										})
+									})
+								  .fail( function(d, textStatus, error) {
+									console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+									})
+								})
+							  .fail( function(d, textStatus, error) {
+								console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+								})
+							})
+						  .fail( function(d, textStatus, error) {
+							console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+							})
+						})
 				  .fail( function(d, textStatus, error) {
 					console.error("getJSON failed, status: " + textStatus + ", error: "+error)
 					})
+				})
+				.fail( function(d, textStatus, error) {
+					console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+				})
 
-		}*/
+		}
 		
 		$("#adminBlock").css("display", "block");
 };
@@ -270,7 +360,6 @@ var hideAll = function (m){
 var loadProjView = function (){
 	var arr = window.location.href.split("/");
 	var id = arr[arr.length-2];
-	console.log(id);
 	$.getJSON('/' + id +'/taskList.json', function(js) { // return json of all task tuples with selected project id
 		  $.each( js.data, function( n, task ){
 			  var m = task.startDate.split('-');
@@ -333,7 +422,15 @@ var loadTask = function (div){
 		$("#taskBlock").css("display", "block");
 	}
 	else{
-		$("#taskID").attr("value","");
+		$("#title").attr("value","(Task Name)"); 
+		$("#overview2").html("");
+		$("#tags").attr("value", "");
+		$("#startDate").attr("value","");
+		$("#estTime").attr("value","");
+		$("#finDate").attr("value","");
+		$("#totalTime").attr("value", "");
+		$("#taskID").attr("value", "" );
+		$("#open2").attr("checked", true);
 		$("#taskBlock").css("display", "none");
 		
 	}
