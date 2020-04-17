@@ -8,7 +8,7 @@ app.set('view-engine','ejs')
 app.use(express.urlencoded({extended:false}))
 app.use('/static', express.static('public'))
 app.use(bodyParser.json());
-var mysqlConnection = mysql.createConnection({
+var mysqlConnection = mysql.createPool({
     host: 'team12servermysql2.mysql.database.azure.com',
     port: '3306',
     user: 'team12adminmysql@team12servermysql2',
@@ -25,19 +25,11 @@ app.get('/setup.js', function(req, res) {
 app.get('/jquery.min.js', function(req, res) {
     res.sendFile(__dirname + "/public/js/" + "jquery.min.js");
   });
+const options = { transports: ['websocket'], pingTimeout: 3000, pingInterval: 5000 };
 
 
 
 
-mysqlConnection.connect((err)=>{  
-    if(!err)
-    {
-       console.log("Connected");
-    }
-    else{
-      console.log(err);
-    }
-})
 app.get('/', (req, res)=> {
     res.sendFile(path.join(__dirname + '/public/index.html'));
 })
@@ -111,6 +103,25 @@ app.post('/projects', (req, res)=> {
     
     console.log(req.body);
     res.redirect('/projects');
+})
+
+
+app.post('/updatetask', (req, res)=> {
+    sql = 'UPDATE projectmanagementdb.task SET title = ?, overview = ?, tags = ?, startDate = ?, estTime = ?, finDate = ?, totalTime = ?, status = ? WHERE taskID = ?'
+
+    console.log(req.body);
+
+    mysqlConnection.query(sql, [req.body.title, req.body.overview2, req.body.tags, req.body.startDate, req.body.estTime, req.body.finDate, req.body.totalTime, req.body.status, req.body.taskID], function(err,results,fields){
+            if(err)
+            {
+                console.log(err);
+            }
+            else{
+                console.log(results);
+                res.redirect('back');
+            }
+    })
+    
 })
 app.get('/:id/home', (req, res)=> {
     var searchID = req.params.id;
@@ -317,66 +328,3 @@ app.post('/register', (req, res)=>{
     
 })
 app.listen(port);
-
-app.get('/:id/empList', (req, res)=> {
-    var searchID = req.params.id;
-    var sql = 'SELECT * FROM projectmanagementdb.employee ORDER BY lastName';
-    mysqlConnection.query(sql, [searchID], function(err, results, fields){
-        if(!err){
-            console.log(results);
-            res.json({data: results});
-        }
-    })
-})
-
-app.get('/:id/projList', (req, res)=> {
-    var searchID = req.params.id;
-    var sql = 'SELECT * FROM projectmanagementdb.project ORDER BY status DESC, startDate DESC';
-    mysqlConnection.query(sql, [searchID], function(err, results, fields){
-        if(!err){
-            console.log(results);
-            res.json({data: results});
-        }
-    })
-})
-
-app.get('/:id/deptList', (req, res)=> {
-    var searchID = req.params.id;
-    var sql = 'SELECT * FROM projectmanagementdb.department';
-    mysqlConnection.query(sql, [searchID], function(err, results, fields){
-        if(!err){
-            console.log(results);
-            res.json({data: results});
-        }
-    })
-})
-app.get('/:id/projRelation', (req, res)=> {
-    var searchID = req.params.id;
-    var sql = 'SELECT * FROM projectmanagementdb.project_relation';
-    mysqlConnection.query(sql, [searchID], function(err, results, fields){
-        if(!err){
-            console.log(results);
-            res.json({data: results});
-        }
-    })
-})
-app.get('/:id/deptEmpRelation', (req, res)=> {
-    var searchID = req.params.id;
-    var sql = 'SELECT * FROM projectmanagementdb.dept_emp';
-    mysqlConnection.query(sql, [searchID], function(err, results, fields){
-        if(!err){
-            console.log(results);
-            res.json({data: results});
-        }
-    })
-})
-app.get('/:id/deptProjRelation', (req, res)=> {
-    var searchID = req.params.id;
-    var sql = 'SELECT * FROM projectmanagementdb.dept_proj';
-    mysqlConnection.query(sql, [searchID], function(err, results, fields){
-        if(!err){
-            console.log(results);
-            res.json({data: results});
-        }
-    })
-})

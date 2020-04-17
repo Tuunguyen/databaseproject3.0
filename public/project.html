@@ -50,7 +50,7 @@
 		</div>
 		<div id="taskBlock">
 			<div style = "position: absolute; top: 2rem; right: 2rem; background: white;" onclick = "loadTask()"> X </div> 
-			<form id = "taskForm" method="post">
+			<form action = "/updatetask" id = "taskForm" method="post">
 				<input type="text" id="title" name="title" value = "(task name)" style= "font-size: 38px;" required><br><br>
 				<label for="overview2">Overview:</label><br>
 				<textarea name="overview2" id= "overview2" form="taskForm" style = "width: 300px; height: 260px;">Enter text here...</textarea><br>
