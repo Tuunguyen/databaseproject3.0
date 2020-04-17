@@ -100,7 +100,6 @@ var loadDueToday = function (){
 						}
 					});	
 					if(isEmpty){
-						console.log(today.getDate().toString());
 						$("#dueToday").append(
 							'<p>No tasks due on today&apos;s date:'  + n[1] + " " + n[2] + ", " + n[3] + '</p>');
 					}

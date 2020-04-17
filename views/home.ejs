@@ -24,12 +24,12 @@
 			<p id = "sm-Meetings" onclick = "loadMeeting()">Meetings</p>
 			<p class = "pl" onclick = "loadFinances()">Finances</p>
 			<p class = "admin"onclick = "loadAdmin()" >Admin View</p>
-			<p class = "admin"onclick = "loadReports()" >Reports</p>
+			<p class = "admin"onclick = 'new function(){ hideAll(1); $("#reportBlock").css("display", "block");}' >Reports</p>
 			<form method="get" action = "/index.html">
 				<button type="submit">Back to Login</button>
 			</form>
 		</div>
-		<div id="projectBlock" style = "display: none;" >
+		<div id="projectBlock">
 			<h1>Project List</h1>
 			<div id="projects">
 				<p id = "ifNoProj"> No projects Assigned </p>
@@ -62,7 +62,7 @@
 			<div id="newAcct">
 			</div>
 		</div>
-		<div id="reportBlock" style = "display: block;"><br><br>
+		<div id="reportBlock" style = "display: none;"><br><br>
 			<h1>Projects Completed During Set Dates:</h1>
 			<label for="deptID2">Select Department:</label><br>
 			<select id="editDept" name="deptID2">
