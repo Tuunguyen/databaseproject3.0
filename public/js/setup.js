@@ -438,6 +438,7 @@ var loadTask = function (div){
 						$("#totalTime").attr("value",task.totalTime);
 						$("#taskID").attr("value",task.taskID);
 						$("#" + task.status + "2").attr("checked", true);
+						$("#projectIDForm").attr("value", id);
 					}
 					
 				})
@@ -458,6 +459,7 @@ var loadTask = function (div){
 		$("#taskID").attr("value", "" );
 		$("#open2").attr("checked", true);
 		$("#taskBlock").css("display", "none");
+		$("#projectIDForm").attr("value", id);
 		
 	}
 };
