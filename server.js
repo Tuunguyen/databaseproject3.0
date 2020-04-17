@@ -107,20 +107,53 @@ app.post('/projects', (req, res)=> {
 
 
 app.post('/updatetask', (req, res)=> {
-    sql = 'UPDATE projectmanagementdb.task SET title = ?, overview = ?, tags = ?, startDate = ?, estTime = ?, finDate = ?, totalTime = ?, status = ? WHERE taskID = ?'
+    
+
+    var projectID = req.body.projectID;
 
     console.log(req.body);
 
-    mysqlConnection.query(sql, [req.body.title, req.body.overview2, req.body.tags, req.body.startDate, req.body.estTime, req.body.finDate, req.body.totalTime, req.body.status, req.body.taskID], function(err,results,fields){
+    if(req.body.taskID ===''){
+            console.log('creating new');
+            sql = "INSERT INTO projectmanagementdb.task SET ?";
+            var values = {
+                taskID: Math.round(Math.random() * 999999) + 100000,
+                empID: req.body.empIDForm,
+                projectID: req.body.projectIDForm,
+                title: req.body.title,
+                overview: req.body.overview2,
+                startDate: req.body.startDate,
+                finDate: req.body.finDate,
+                estTime: req.body.estTime,
+                totalTime: req.body.totalTime,
+                tags: req.body.tags,
+                status: req.body.status
+            };
+            mysqlConnection.query(sql, values, function(err, results, fields){
+                if(err)
+                {
+                    console.log(err);
+                }
+                else{
+                    console.log(results);
+                    res.redirect('back');
+                }
+
+            })
+    }
+    else{
+        sql = 'UPDATE projectmanagementdb.task SET title = ?, overview = ?, tags = ?, startDate = ?, estTime = ?, finDate = ?, totalTime = ?, status = ? WHERE taskID = ?'
+        mysqlConnection.query(sql, [req.body.title, req.body.overview2, req.body.tags, req.body.startDate, req.body.estTime, req.body.finDate, req.body.totalTime, req.body.status, req.body.taskID], function(err,results,fields){
             if(err)
             {
                 console.log(err);
             }
             else{
-                console.log(results);
+                console.log('--------------????????????????????????');
                 res.redirect('back');
             }
     })
+    }
     
 })
 app.get('/:id/home', (req, res)=> {
@@ -333,66 +366,3 @@ app.post('/register', (req, res)=>{
     
 })
 app.listen(port);
-
-app.get('/:id/empList', (req, res)=> {
-    var searchID = req.params.id;
-    var sql = 'SELECT * FROM projectmanagementdb.employee ORDER BY lastName';
-    mysqlConnection.query(sql, [searchID], function(err, results, fields){
-        if(!err){
-            console.log(results);
-            res.json({data: results});
-        }
-    })
-})
-
-app.get('/:id/projList', (req, res)=> {
-    var searchID = req.params.id;
-    var sql = 'SELECT * FROM projectmanagementdb.project ORDER BY startDate DESC';
-    mysqlConnection.query(sql, [searchID], function(err, results, fields){
-        if(!err){
-            console.log(results);
-            res.json({data: results});
-        }
-    })
-})
-
-app.get('/:id/deptList', (req, res)=> {
-    var searchID = req.params.id;
-    var sql = 'SELECT * FROM projectmanagementdb.department';
-    mysqlConnection.query(sql, [searchID], function(err, results, fields){
-        if(!err){
-            console.log(results);
-            res.json({data: results});
-        }
-    })
-})
-app.get('/:id/projRelation', (req, res)=> {
-    var searchID = req.params.id;
-    var sql = 'SELECT * FROM projectmanagementdb.project_relation';
-    mysqlConnection.query(sql, [searchID], function(err, results, fields){
-        if(!err){
-            console.log(results);
-            res.json({data: results});
-        }
-    })
-})
-app.get('/:id/deptEmpRelation', (req, res)=> {
-    var searchID = req.params.id;
-    var sql = 'SELECT * FROM projectmanagementdb.dept_emp';
-    mysqlConnection.query(sql, [searchID], function(err, results, fields){
-        if(!err){
-            console.log(results);
-            res.json({data: results});
-        }
-    })
-})
-app.get('/:id/deptProjRelation', (req, res)=> {
-    var searchID = req.params.id;
-    var sql = 'SELECT * FROM projectmanagementdb.dept_proj';
-    mysqlConnection.query(sql, [searchID], function(err, results, fields){
-        if(!err){
-            console.log(results);
-            res.json({data: results});
-        }
-    })
-}) 
