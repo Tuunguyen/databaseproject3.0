@@ -459,7 +459,7 @@ var loadTask = function (div){
 		$("#estTime").attr("value","");
 		$("#finDate").attr("value","");
 		$("#totalTime").attr("value", "");
-		$("#taskID").attr("value", "" );
+		$("#taskID").attr("value", "1" );
 		$("#open2").attr("checked", true);
 		$("#taskBlock").css("display", "none");
 		$("#projectIDForm").attr("value", id);
@@ -472,16 +472,16 @@ var loadMeetLog = function () {
 	var id = arr[arr.length-2];
 	hideAll(0);
 		if($("#meetingLog").children().length == 1){
-			$.getJSON('/meetings2.json', function(js) {  //return json of array of all meetings with project ID, ordered from oldest date to newest
+			$.getJSON('/' + id + '/meetings2.json', function(js) {  //return json of array of all meetings with project ID, ordered from oldest date to newest
 					var today = new Date();
 					$.each( js.data, function( n, meeting){
 						var m = (meeting.date).split('-');
 						var date = new Date(m[0], m[1], m[2].substring(0,2));
 						if(today > date && !(today.getMonth() == date.getMonth() && today.getDate() == date.getDate() && today.getYear() == date.getYear())){
-							$("#meetingLog").append('<h2> Meeting on ' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + " at "+ m[2].substring(3,8) + '</h2><p>"' + meeting.notes + '"</p>');
+							$("#meetingLog").append('<h2 onclick="loadMeeting(&apos;' + meeting.meetingID + '&apos;);"> Meeting on ' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + " at "+ m[2].substring(3,8) + '</h2><p>"' + meeting.notes + '"</p>');
 						}
 						else{
-							$("#futureMeetings").append('<h2> Meeting on ' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + " at "+ m[2].substring(3,8) + '</h2>');
+							$("#futureMeetings").append('<h2 onclick="loadMeeting(&apos;' + meeting.meetingID + '&apos;);"> Meeting on ' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + " at "+ m[2].substring(3,8) + '</h2>');
 						}
 					});	
                })
@@ -493,6 +493,47 @@ var loadMeetLog = function () {
 		}
 		
 		$("#meetingBlock").css("display", "block");
+};
+
+var loadMeeting = function (div){
+	var arr = window.location.href.split("/");
+	var id = arr[arr.length-2];
+	if($("#editMeetBlock").css("display") == "none"){
+		$.getJSON('/' + id + '/meetings2.json', function(js) { // return json of all task tuples with selected project id
+				$.each( js.data, function(n, meet) {
+					if(meet.meetingID == div){
+						console.log("meet");
+						$("#date").attr("value",meet.date.slice(0,-1)); 
+						$("#notes").html(meet.notes);
+						$("#meetingID").attr("value", meet.meetingID);
+					}
+					
+				})
+		   })
+			  .done( function(){
+					$.getJSON('/' + id +'/meetRelation', function(js) {
+						$.each( js.data, function( n, dpRelation){
+							if($("#meetingID").attr("value") == dpRelation.meetingID){
+								$("#empList").html($("#empLlist").html() + dpRelation.empID + ",");
+							}
+						})
+					})
+				  .fail( function(d, textStatus, error) {
+					console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+					})
+				})
+			  .fail( function(d, textStatus, error) {
+				console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+				})		
+		$("#editMeetBlock").css("display", "block");
+	}
+	else{
+		$("date").attr("value",""); 
+		$("#notes").html("Enter notes here...");
+		$("#meetingID").attr("value", "1");
+		$("#editMeetBlock").css("display", "none");
+		
+	}
 };
 
 var collExp = function(div){
@@ -507,7 +548,7 @@ var collExp = function(div){
 var popEmp = function(){
 	var empForm = $("#empForm").children("input");
 	if($("#editEmp").children("option:selected").val() == ""){
-		$("#empIDForm").removeAttr("value");
+		$("#empIDForm").attr("value", "1");
 		$('#empForm')
             .find(':radio, :checkbox').removeAttr('checked').end()
             .find('textarea, :text, select').val('')
@@ -552,7 +593,7 @@ var popProj = function(){
 		$($(empForm)[4]).removeAttr("value");
 		$($(empForm)[5]).removeAttr("value");
 		$($(empForm)[6]).removeAttr("readonly");
-		$("#projectIDForm").removeAttr("value");
+		$("#projectIDForm").attr("value", "1");
 		$('#projForm')
             .find(':radio, :checkbox').removeAttr('checked').end()
             .find('textarea, :text, select, input[type=datetime-local]').val('')
@@ -600,7 +641,7 @@ var popDept = function(){
             .find('textarea, :text, select, input[type=datetime-local]').val('')
 		return;
 	}
-	$($(empForm)[1]).attr("value", "");
+	$($(empForm)[1]).attr("value", "1");
 	$($(empForm)[2]).attr("value", $($("#" + $("#editDept").children("option:selected").val() + "-row").children()[4]).html().slice(1));
 	$($(empForm)[2]).attr("readonly", "");
 	$.getJSON('/' + id + '/deptList', function(js) {

@@ -80,11 +80,11 @@
 			</table><br>
 			<button type="submit" onclick = "new function(){window.open('/register')}">Add Employee</button>
 			<button type="submit" onclick = "new function(){$('#empForm').css('display', 'block');$('#editEmp').css('display', '');$($('#editEmp').prev().prev()).css('display', '')}">Edit/Delete Employee</button><br>
-			<form id = "empForm" method = "post" style = "display: none;">
-				<label for="empID">Select Employee:</label><br>
-				<select id="editEmp" name="empID" onchange = "popEmp()" required>
+			<label for="empID" style = "display: none;">Select Employee:</label><br>
+				<select id="editEmp" name="empID" onchange = "popEmp()" style = "display: none;">
 				  <option value=""> - </option>
 				</select><br>
+			<form id = "empForm" method = "post" style = "display: none;">
 				<label for="fname">First Name:</label><br>
 				<input type="text" id="fname" name="fname" required=""><br>
 				<label for="mname">Middle Name:</label><br>
@@ -127,15 +127,15 @@
 				<th class = "topTable"  >Status</th>
 			  </tr>
 			</table><br>
-			<button type="submit" onclick = "new function(){$('#projForm').css('display', 'block');$('#editProj').css('display', 'none');$($('#editProj').prev().prev()).css('display', 'none');$($('#projForm').children('input')[4]).removeAttr('value');$($('#projForm').children('input')[5]).removeAttr('value');$($('#projForm').children('input')[6]).removeAttr('readonly');$('#projectIDForm').removeAttr('value');$('#projForm')
+			<button type="submit" onclick = "new function(){$('#projForm').css('display', 'block');$('#editProj').css('display', 'none');$($('#editProj').prev().prev()).css('display', 'none');$($('#projForm').children('input')[4]).removeAttr('value');$($('#projForm').children('input')[5]).removeAttr('value');$($('#projForm').children('input')[6]).removeAttr('readonly');$('#projectIDForm').attr('value','1');$('#projForm')
             .find(':radio, :checkbox').removeAttr('checked').end()
             .find('textarea, :text, select').val('')}">Add Project</button>
 			<button type="submit" onclick = "new function(){$('#projForm').css('display', 'block');$('#editProj').css('display', '');$($('#editProj').prev().prev()).css('display', '');}">Edit/Delete Project</button><br>
-			<form action = "/editProjects" id = "projForm" method = "POST" style = "display: none;">
-				<label for="projID">Select Project:</label><br>
-				<select id="editProj" name="projID" onchange = "popProj()" required>
+			<label for="projID" style = "display: none;" >Select Project:</label><br>
+			<select id="editProj" style = "display: none;" onchange = "popProj()">
 				  <option value=""> - </option>
-				</select><br>
+			</select><br>
+			<form action = "/editProjects" id = "projForm" method = "POST" style = "display: none;">
 				<label for="title">Project Name:</label><br>
 				<input type="text" id="title" name="title" required=""><br>
 				<label for="overview">Overview:</label><br>
@@ -172,11 +172,11 @@
             .find(':radio, :checkbox').removeAttr('checked').end()
             .find('textarea, :text, select').val('')}">Add Department</button>
 			<button type="submit" onclick = "new function(){$('#deptForm').css('display', 'block');$('#editDept').css('display', '');$($('#editDept').prev().prev()).css('display', '');}">Edit/Delete Department</button>
-			<form id = "deptForm" method = "post" style = "display: none;">
-				<label for="deptID">Select Department:</label><br>
-				<select id="editDept" name="deptID" onchange = "popDept()" required>
+			<label for="deptID" style = "display: none;" >Select Department:</label><br>
+				<select id="editDept" name="deptID" onchange = "popDept()" style = "display: none;">
 				  <option value=""> - </option>
 				</select><br>
+			<form id = "deptForm" method = "post" style = "display: none;">
 				<label for="deptHead">Department Head:</label><br>
 				<input type="text" id="deptHead" name="deptHead" required=""><br>
 				<label for="employeeList">Employee List:</label><br>

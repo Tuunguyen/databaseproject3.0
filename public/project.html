@@ -76,7 +76,7 @@
 					<label for="BLOCKED2" required>Blocked</label><br>
 					<input type="radio" id="CLOSED2" name="status" value="CLOSED">
 					<label for="CLOSED2" required>Closed</label><br><br><br><br>
-					<input type="submit" style= "bottom: 2rem;" name="action" value="Save">
+					<input type="submit" style= "bottom: 2rem;" name="action"value="Save">
 					<input type="submit" style= "bottom: 2rem;" name="action" value="Delete Task">
 					<input type="text" id="taskID" name="taskID" style = "display: none;" readonly>
 					<input type="text" id="projectIDForm" name="projectIDForm" style = "display: none;" readonly>
@@ -92,20 +92,19 @@
 			</div>
 		</div>
 		<div id="editMeetBlock">
-			<div style = "position: absolute; top: 2rem; right: 2rem; background: white;" onclick = "loadTask()"> X </div> 
+			<div style = "position: absolute; top: 2rem; right: 2rem; background: white;" onclick = "loadMeeting()"> X </div> 
 			<form id = "meetForm" method="post">
 				<p style= "font-size: 38px; margin: 0px;">Meeting:</p><br><br>
 				<div id = "center">
-					<label for="startDate">Date and Time:</label><br>
-					<input type="datetime-local" id="startDate" name="startDate" required><br>
+					<label for="date">Date and Time:</label><br>
+					<input type="datetime-local" id="date" name="date" required><br>
 					<label for="empList">Employee List: </label><br>
 					<input type="text" id="empList" name="empList"><br>
 					<label for="notes">Meeting Notes:</label><br>
-					<textarea name="notes" id= "notes" form="meetForm" style = "width: 300px; height: 260px;">Enter text here...</textarea><br>
+					<textarea name="notes" id= "notes" form="meetForm" style = "width: 100%; height: 240px;">Enter text here...</textarea><br>
 					<input type="submit" style= "bottom: 2rem;" name="action" value="Save">
-					<input type="submit" style= "bottom: 2rem;" name="action" value="Delete Task">
-					<input type="text" id="taskID" name="taskID" style = "display: none;" readonly>
-					<input type="text" id="projectIDForm" name="projectIDForm" style = "display: none;" readonly>
+					<input type="text" id="meetingID" name="meetingID" style = "display: none;" readonly>
+					<input type="text" id="projIDForm" name="projIDForm" style = "display: none;" readonly>
 				</div>
 			</form>
 		</div>

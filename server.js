@@ -272,10 +272,10 @@ app.get('/:id/meetings.json', (req, res)=> {
         }
     })
 })
-app.get('/meetings2.json', (req, res)=> {
-   
-
-    mysqlConnection.query('SELECT meetingID, projectID, date, notes FROM projectmanagementdb.meetings', function(err, results, fields){
+app.get('/:id/meetings2.json', (req, res)=> {
+	var searchID = req.params.id;
+	
+    mysqlConnection.query('SELECT meetingID, projectID, date, notes FROM projectmanagementdb.meetings WHERE projectID = ?', [searchID], function(err, results, fields){
         if(!err){
             console.log(results);
             res.json({data: results});
@@ -363,6 +363,16 @@ app.get('/:id/deptList', (req, res)=> {
 app.get('/:id/projRelation', (req, res)=> {
     var searchID = req.params.id;
     var sql = 'SELECT * FROM projectmanagementdb.project_relation';
+    mysqlConnection.query(sql, [searchID], function(err, results, fields){
+        if(!err){
+            console.log(results);
+            res.json({data: results});
+        }
+    })
+})
+app.get('/:id/meetRelation', (req, res)=> {
+    var searchID = req.params.id;
+    var sql = 'SELECT * FROM projectmanagementdb.meeting_relation';
     mysqlConnection.query(sql, [searchID], function(err, results, fields){
         if(!err){
             console.log(results);
