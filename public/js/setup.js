@@ -239,7 +239,7 @@ var loadAdmin = function (){
 			$.getJSON('/' + id +'/deptList', function(js) {
 				$.each( js.data, function( n, dept){
                   $("#deptList").append(
-				  	'<tr><th>' + dept.deptID + '</th><th class = "empRename" >'+ dept.deptHead + '</th><th class = "empRename" id = "'+ dept.deptID +'-empList"></th><th class = "projRename" id = "'+ dept.deptID +'-projList"></th><th>$'+ dept.current_balance +'</th></tr>');
+				  	'<tr id = "' + dept.deptID + '-row"><th>' + dept.deptID + '</th><th class = "empRename" >'+ dept.deptHead + '</th><th class = "empRename" id = "'+ dept.deptID +'-empList"></th><th class = "projRename" id = "'+ dept.deptID +'-projList"></th><th>$'+ dept.current_balance +'</th></tr>');
 				  $("#editDept").append(
 					'<option value="' + dept.deptID + '">' + dept.deptID + '</option>');
 				})
@@ -268,7 +268,7 @@ var loadAdmin = function (){
 										$(idHTML).html(newHTML)
 									})
 								  $("#projList").append(
-								'<tr><th>' + project.projectID + '</th><th> ' + project.title + '</th><th>' + project.deptID +'</th><th class = "empRename">'+ project.projectLead +'</th><th class = "empRename" id = "' + project.projectID + '-list"></th><th>'+ a[1] + "/" + a[2].substring(0,2) + "/" + a[0] +'</th><th>'+ b[1] + "/" + b[2].substring(0,2) + "/" + b[0] +'</th><th>$' + project.budget +'</th><th>$'+ project.current_balance +'</th><th>' + project.estTime + ' hrs.</th><th>' + project.timeTotal + ' hrs.</th><th>' + project.status + '</th></tr>');
+								'<tr id = "' + project.projectID + '-row"><th>' + project.projectID + '</th><th> ' + project.title + '</th><th>' + project.deptID +'</th><th class = "empRename">'+ project.projectLead +'</th><th class = "empRename" id = "' + project.projectID + '-list"></th><th>'+ a[1] + "/" + a[2].substring(0,2) + "/" + a[0] +'</th><th>'+ b[1] + "/" + b[2].substring(0,2) + "/" + b[0] +'</th><th>$' + project.budget +'</th><th>$'+ project.current_balance +'</th><th>' + project.estTime + ' hrs.</th><th>' + project.timeTotal + ' hrs.</th><th>' + project.status + '</th></tr>');
 								  $("#editProj").append(
 											  '<option value="' + project.projectID + '">' + project.title + '</option>');
 								})
@@ -307,7 +307,7 @@ var loadAdmin = function (){
 													$(idHTML).html(newHTML);
 												})
 											  $("#empList").append(
-												'<tr><th>' + employee.firstName + '</th><th>' + employee.midName + '</th><th>' + employee.lastName + '</th><th class = "projList" id = "' + employee.employeeID + '-list"></th><th>$' + employee.payrate + '</th><th>' + hourOrSal(employee.hourOrSal) + '</th><th>' + c[1] + "/" + c[2].substring(0,2) + "/" + c[0] + '</th><th>' + employee.empID + '</th><th>' + employee.empType + '</th></tr>');
+												'<tr id = "' + employee.empID + '-row"><th>' + employee.firstName + '</th><th>' + employee.midName + '</th><th>' + employee.lastName + '</th><th>' + employee.deptID +'</th><th class = "projList" id = "' + employee.employeeID + '-list"></th><th>$' + employee.payrate + '</th><th>' + hourOrSal(employee.hourOrSal) + '</th><th>' + c[1] + "/" + c[2].substring(0,2) + "/" + c[0] + '</th><th>' + employee.empID + '</th><th>' + employee.empType + '</th></tr>');
 											  $("#editEmp").append(
 											  '<option value="' + employee.empID + '">' + employee.lastName + ", " + employee.firstName + '</option>');
 											})
@@ -478,3 +478,44 @@ var collExp = function(div){
 		$(div).css("display","none");
 	}
 };
+
+var popEmp = function(){
+	var empForm = $("#empForm").children("input");
+	if($("#editEmp").children("option:selected").val() == ""){
+		$('#empForm')
+            .find(':radio, :checkbox').removeAttr('checked').end()
+            .find('textarea, :text, select').val('')
+		return;
+	}
+	var rowInfo = $("#" + $("#editEmp").children("option:selected").val() + "-row").children();
+	$($(empForm)[0]).attr("value", $($(rowInfo)[0]).html());
+	$($(empForm)[1]).attr("value", $($(rowInfo)[1]).html());
+	$($(empForm)[2]).attr("value", $($(rowInfo)[2]).html());
+	$($(empForm)[3]).attr("value", $($(rowInfo)[3]).html());
+	$($(empForm)[4]).attr("value", $($(rowInfo)[5]).html().substring(1));
+	if($($(rowInfo)[6]).html() == "Salary"){
+		$($(empForm)[6]).attr("checked", true);
+		$($(empForm)[5]).removeAttr('checked');
+	}
+	else{
+		$($(empForm)[5]).attr("checked", true);
+		$($(empForm)[6]).removeAttr('checked');
+	}
+	if($($(rowInfo)[9]).html() == "admin"){
+		console.log("admin");
+		$($(empForm)[7]).removeAttr('checked');
+		$($(empForm)[8]).removeAttr('checked');
+		$($(empForm)[9]).attr("checked", true);
+	}
+	else if($($(rowInfo)[9]).html() == "pl"){
+		console.log("pl");
+		$($(empForm)[7]).removeAttr('checked');
+		$($(empForm)[8]).attr("checked", true);
+		$($(empForm)[9]).removeAttr('checked');
+	}
+	else{
+		$($(empForm)[7]).attr("checked", true);
+		$($(empForm)[8]).removeAttr('checked');
+		$($(empForm)[9]).removeAttr('checked');
+	}
+}
