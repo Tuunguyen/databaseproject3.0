@@ -128,7 +128,7 @@
 				<th class = "topTable"  >Status</th>
 			  </tr>
 			</table><br>
-			<button type="submit" onclick = "new function(){$('#projForm').css('display', 'block');$('#editProj').css('display', 'none');$($('#editProj').prev().prev()).css('display', 'none');		$('#projForm')
+			<button type="submit" onclick = "new function(){$('#projForm').css('display', 'block');$('#editProj').css('display', 'none');$($('#editProj').prev().prev()).css('display', 'none');$($('#projForm').children('input')[4]).removeAttr('value');$($('#projForm').children('input')[5]).removeAttr('value');$($('#projForm').children('input')[6]).removeAttr('readonly');$('#projForm')
             .find(':radio, :checkbox').removeAttr('checked').end()
             .find('textarea, :text, select').val('')}">Add Project</button>
 			<button type="submit" onclick = "new function(){$('#projForm').css('display', 'block');$('#editProj').css('display', '');$($('#editProj').prev().prev()).css('display', '');}">Edit/Delete Project</button><br>
@@ -140,17 +140,17 @@
 				<label for="title">Project Name:</label><br>
 				<input type="text" id="title" name="title" required=""><br>
 				<label for="overview">Overview:</label><br>
-				<textarea name="overview" id= "overview" form="projForm" style = "width: 300px; height: 60px;">Enter text here...</textarea><br>
+				<textarea name="overview" id= "overviewP" form="projForm" style = "width: 300px; height: 60px;">Enter text here...</textarea><br>
 				<label for="deptID">Department ID:</label><br>
 				<input type="text" id="deptID" name="deptID" required=""><br>
 				<label for="projLead">Project Lead:</label><br>
 				<input type="text" id="projLEad" name="projLead" required=""><br>
-				<label for="empList">Project Members:</label><br>
-				<input type="text" id="empList" name="empList"><br>
+				<label for="empListForm">Project Members:</label><br>
+				<input type="text" id="empLisFormt" name="empListForm"><br>
 				<label for="startDate">Start Date: </label><br>
-				<input type="text" id="startDate" name="startDate" required=""><br>
+				<input type="datetime-local" id="startDate" name="startDate" required=""><br>
 				<label for="finDate">Due Date:</label><br>
-				<input type="text" id="finDate" name="finDate" required=""><br>
+				<input type="datetime-local" id="finDate" name="finDate" required=""><br>
 				<label for="budget">Budget:</label><br>
 				<input type="text" id="budget" name="budget" required=""><br>
 				<label for="estTime">Estimated Time: </label><br>
@@ -168,7 +168,7 @@
 				<th class = "topTable" >Current Balance</th>
 			  </tr>
 			</table><br>
-			<button type="submit" onclick = "new function(){$('#deptForm').css('display', 'block');$('#editDept').css('display', 'none');$($('#editDept').prev().prev()).css('display', 'none');		$('#deptForm')
+			<button type="submit" onclick = "new function(){$('#deptForm').css('display', 'block');$('#editDept').css('display', 'none');$($('#editDept').prev().prev()).css('display', 'none');$($('#deptForm').children('input')[2]).removeAttr('readonly');$('#deptForm')
             .find(':radio, :checkbox').removeAttr('checked').end()
             .find('textarea, :text, select').val('')}">Add Department</button>
 			<button type="submit" onclick = "new function(){$('#deptForm').css('display', 'block');$('#editDept').css('display', '');$($('#editDept').prev().prev()).css('display', '');}">Edit/Delete Department</button>

@@ -22,7 +22,7 @@
 			<p>Analytics</p>
 			<p class = "pl"></p>
 			<p class = "admin"></p>
-			<form id = "backToHome" method="post" action = "/home.html"> <!-- just change get to post -->
+			<form id = "backToHome" method="post" action = "/home.html">
 				<input type="text" id="empID" name="empID" style = "display: none;" required>
 				<button type="submit">Back to Home</button>
 			</form>
@@ -62,7 +62,7 @@
 					<label for="estTime">Estimated Completion Time: </label><br>
 					<input type="text" id="estTime" name="estTime"><br>
 					<label for="startDate">Finish Date:</label><br>
-					<input type="datetime-local" id="finDate" name="finDate" ><br>
+					<input type="datetime-local" id="finDate" name="finDate" readonly><br>
 					<label for="totalTime">Total Completion Time: </label><br>
 					<input type="text" id="totalTime" name="totalTime"><br>
 					<input type="radio" id="OPEN2" name="status" value="OPEN">

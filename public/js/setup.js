@@ -255,26 +255,10 @@ var loadAdmin = function (){
 								$.each( js.data, function( n, project){
 									var a = (project.startDate).split('-');
 									var b = (project.finDate).split('-');
-									$.each( $(".projRename"), function( n, idHTML){
-										var newHTML = "";
-										$.each( $(idHTML).html().split(","), function( n, id){
-											if(id == project.projectID){
-												newHTML += project.title + ",";
-											}
-											else if($(idHTML).html().split(",").length != n+1){
-												newHTML += id + ",";
-											}
-										})
-										$(idHTML).html(newHTML)
-									})
 								  $("#projList").append(
 								'<tr id = "' + project.projectID + '-row"><th>' + project.projectID + '</th><th> ' + project.title + '</th><th>' + project.deptID +'</th><th class = "empRename">'+ project.projectLead +'</th><th class = "empRename" id = "' + project.projectID + '-list"></th><th>'+ a[1] + "/" + a[2].substring(0,2) + "/" + a[0] +'</th><th>'+ b[1] + "/" + b[2].substring(0,2) + "/" + b[0] +'</th><th>$' + project.budget +'</th><th>$'+ project.current_balance +'</th><th>' + project.estTime + ' hrs.</th><th>' + project.timeTotal + ' hrs.</th><th>' + project.status + '</th></tr>');
 								  $("#editProj").append(
 											  '<option value="' + project.projectID + '">' + project.title + '</option>');
-								})
-								$.each( $(".projRename"), function( n, idHTML){
-									$(idHTML).html($(idHTML).html().slice(0,-1));
-									$(idHTML).html($(idHTML).html().replace(/,/g,", "));
 								})
 								$("#projList").css("font-size","11px");
 							})
@@ -307,7 +291,7 @@ var loadAdmin = function (){
 													$(idHTML).html(newHTML);
 												})
 											  $("#empList").append(
-												'<tr id = "' + employee.empID + '-row"><th>' + employee.firstName + '</th><th>' + employee.midName + '</th><th>' + employee.lastName + '</th><th>' + employee.deptID +'</th><th class = "projList" id = "' + employee.employeeID + '-list"></th><th>$' + employee.payrate + '</th><th>' + hourOrSal(employee.hourOrSal) + '</th><th>' + c[1] + "/" + c[2].substring(0,2) + "/" + c[0] + '</th><th>' + employee.empID + '</th><th>' + employee.empType + '</th></tr>');
+												'<tr id = "' + employee.empID + '-row"><th>' + employee.firstName + '</th><th>' + employee.midName + '</th><th>' + employee.lastName + '</th><th>' + employee.deptID +'</th><th class = "projRename" id = "' + employee.empID + '-list"></th><th>$' + employee.payrate + '</th><th>' + hourOrSal(employee.hourOrSal) + '</th><th>' + c[1] + "/" + c[2].substring(0,2) + "/" + c[0] + '</th><th>' + employee.empID + '</th><th>' + employee.empType + '</th></tr>');
 											  $("#editEmp").append(
 											  '<option value="' + employee.empID + '">' + employee.lastName + ", " + employee.firstName + '</option>');
 											})
@@ -315,7 +299,43 @@ var loadAdmin = function (){
 												$(idHTML).html($(idHTML).html().slice(0,-1));
 												$(idHTML).html($(idHTML).html().replace(/,/g,", "));
 											})
+											$("#empList").css("font-size", "13px");
 										})
+										.done( function(){
+											$.getJSON('/' + id +'/projRelation', function(js) {
+												$.each( js.data, function( n, dpRelation){
+													  $("#" + dpRelation.empID + "-list").html($("#" + dpRelation.empID + "-list").html() + dpRelation.projectID + ",");
+													})
+												})
+											  .done( function(){
+												$.getJSON('/' + id +'/projList', function(js) {
+													$.each( js.data, function( n, project){
+														$.each( $(".projRename"), function( n, idHTML){
+															var newHTML = "";
+															$.each( $(idHTML).html().split(","), function( n, id){
+																if(id == project.projectID){
+																	newHTML += project.title + ",";
+																}
+																else if($(idHTML).html().split(",").length != n+1){
+																	newHTML += id + ",";
+																}
+															})
+															$(idHTML).html(newHTML)
+														})
+													})
+													$.each( $(".projRename"), function( n, idHTML){
+														$(idHTML).html($(idHTML).html().slice(0,-1));
+														$(idHTML).html($(idHTML).html().replace(/,/g,", "));
+													})
+													})
+												  .fail( function(d, textStatus, error) {
+													console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+													})
+												})
+											  .fail( function(d, textStatus, error) {
+												console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+												})
+											})
 									  .fail( function(d, textStatus, error) {
 										console.error("getJSON failed, status: " + textStatus + ", error: "+error)
 										})
@@ -487,6 +507,7 @@ var popEmp = function(){
             .find('textarea, :text, select').val('')
 		return;
 	}
+	$($(empForm)[1]).attr("value", "");
 	var rowInfo = $("#" + $("#editEmp").children("option:selected").val() + "-row").children();
 	$($(empForm)[0]).attr("value", $($(rowInfo)[0]).html());
 	$($(empForm)[1]).attr("value", $($(rowInfo)[1]).html());
@@ -502,13 +523,11 @@ var popEmp = function(){
 		$($(empForm)[6]).removeAttr('checked');
 	}
 	if($($(rowInfo)[9]).html() == "admin"){
-		console.log("admin");
 		$($(empForm)[7]).removeAttr('checked');
 		$($(empForm)[8]).removeAttr('checked');
 		$($(empForm)[9]).attr("checked", true);
 	}
 	else if($($(rowInfo)[9]).html() == "pl"){
-		console.log("pl");
 		$($(empForm)[7]).removeAttr('checked');
 		$($(empForm)[8]).attr("checked", true);
 		$($(empForm)[9]).removeAttr('checked');
@@ -518,4 +537,83 @@ var popEmp = function(){
 		$($(empForm)[8]).removeAttr('checked');
 		$($(empForm)[9]).removeAttr('checked');
 	}
-}
+};
+
+var popProj = function(){
+	var empForm = $("#projForm").children("input");
+	if($("#editProj").children("option:selected").val() == ""){
+		$($(empForm)[4]).removeAttr("value");
+		$($(empForm)[5]).removeAttr("value");
+		$($(empForm)[6]).removeAttr("readonly");
+		$('#projForm')
+            .find(':radio, :checkbox').removeAttr('checked').end()
+            .find('textarea, :text, select, input[type=datetime-local]').val('')
+		return;
+	}
+	$("#overviewP").html("");
+	$($(empForm)[3]).attr("value", "");
+	$.getJSON('/' + $("#editProj").children("option:selected").val() +'/projectData.json', function(js) {
+		$($(empForm)[0]).attr("value", js.data[0].title)
+		$("#overviewP").html(js.data[0].overview);
+		$($(empForm)[1]).attr("value", $($("#" + $("#editProj").children("option:selected").val() + "-row").children()[2]).html());
+		$($(empForm)[2]).attr("value", js.data[0].projectLead);
+		$($(empForm)[4]).attr("value", js.data[0].startDate.slice(0,-1));
+		$($(empForm)[5]).attr("value", js.data[0].finDate.slice(0,-1));
+		$($(empForm)[6]).attr("value", js.data[0].budget);
+		$($(empForm)[6]).attr("readonly", "");
+		$($(empForm)[7]).attr("value", js.data[0].estTime);
+	})
+		.done( function(){
+			$.getJSON('/' + $("#editProj").children("option:selected").val() + '/projRelation', function(js) {
+				$.each( js.data, function( n, dpRelation){
+					if( dpRelation.projectID == $("#editProj").children("option:selected").val()){
+					$($(empForm)[3]).attr("value", $($(empForm)[3]).attr("value") + dpRelation.empID + ", ");
+					}
+				});
+			})
+			.fail( function(d, textStatus, error) {
+				console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+			});
+		})
+		.fail( function(d, textStatus, error) {
+			console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+		});
+};
+
+var popDept = function(){
+	var arr = window.location.href.split("/");
+	var id = arr[arr.length-2];
+	var empForm = $("#deptForm").children("input");
+	if($("#editDept").children("option:selected").val() == ""){
+		$($(empForm)[2]).removeAttr("readonly");
+		$('#deptForm')
+            .find(':radio, :checkbox').removeAttr('checked').end()
+            .find('textarea, :text, select, input[type=datetime-local]').val('')
+		return;
+	}
+	$($(empForm)[1]).attr("value", "");
+	$($(empForm)[2]).attr("value", $($("#" + $("#editDept").children("option:selected").val() + "-row").children()[4]).html().slice(1));
+	$($(empForm)[2]).attr("readonly", "");
+	$.getJSON('/' + id + '/deptList', function(js) {
+		$.each( js.data, function( n, dept){
+			if( dept.deptID == $("#editDept").children("option:selected").val()){
+				$($(empForm)[0]).attr("value", dept.deptHead);
+			}
+		});
+	})
+		.done( function(){
+			$.getJSON('/' + id + '/deptEmpRelation', function(js) {
+				$.each( js.data, function( n, dpRelation){
+					if( dpRelation.deptID == $("#editDept").children("option:selected").val()){
+						$($(empForm)[1]).attr("value", $($(empForm)[1]).attr("value") + dpRelation.empID + ", ");
+					}
+				});
+			})
+			.fail( function(d, textStatus, error) {
+				console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+			});
+		})
+		.fail( function(d, textStatus, error) {
+			console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+		});
+};
