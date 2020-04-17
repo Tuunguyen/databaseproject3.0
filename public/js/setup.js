@@ -432,6 +432,7 @@ var loadTask = function (div){
 						$("#title").attr("value",task.title); 
 						$("#overview2").html(task.overview);
 						$("#tags").attr("value",task.tags);
+						$("#empIDForm").attr("value",task.empID);
 						$("#startDate").attr("value",task.startDate.slice(0,-1));
 						$("#estTime").attr("value",task.estTime);
 						$("#finDate").attr("value",task.finDate.slice(0,-1));
@@ -452,6 +453,7 @@ var loadTask = function (div){
 		$("#title").attr("value","(Task Name)"); 
 		$("#overview2").html("");
 		$("#tags").attr("value", "");
+		$("#empIDForm").attr("value", "");
 		$("#startDate").attr("value","");
 		$("#estTime").attr("value","");
 		$("#finDate").attr("value","");
