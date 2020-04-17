@@ -295,6 +295,10 @@ app.get('/register', (req, res)=> {
     res.render('register.ejs');
 })
 
+app.get('/sucess', (req, res)=> {
+    res.render('sucess.ejs');
+})
+
 app.post('/register', (req, res)=>{
     console.log(req.body);
     var id = Math.round(Math.random() * 999999) + 100000;
@@ -304,19 +308,20 @@ app.post('/register', (req, res)=>{
         empID: id,
         email: req.body.email,
         password:  id + req.body.lastName,
-        deptID: '1',
+        deptID: req.body.deptID,
         firstName: req.body.firstName,
         midName: req.body.midName,
         lastName: req.body.lastName,
         payrate: req.body.payrate,
-        hourOrSal: req.body.hourOrSal
+        hourOrSal: req.body.hourOrSal,
+		empType: req.body.empType
     };
     
     mysqlConnection.query(sql, values, function(err,result){
         if(!err){
             console.log('added');
             console.log(values);
-            res.redirect('/');
+            res.redirect('/sucess');
         }
         else{
             console.log(err);

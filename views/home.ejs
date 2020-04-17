@@ -78,9 +78,7 @@
 				<th class = "topTable"  >Employee Type</th>
 			  </tr>
 			</table><br>
-			<button type="submit" onclick = "new function(){$('#empForm').css('display', 'block');$('#editEmp').css('display', 'none');$($('#editEmp').prev().prev()).css('display', 'none');$('#empForm')
-            .find(':radio, :checkbox').removeAttr('checked').end()
-            .find('textarea, :text, select').val('')}">Add Employee</button>
+			<button type="submit" onclick = "new function(){window.open('/register')}">Add Employee</button>
 			<button type="submit" onclick = "new function(){$('#empForm').css('display', 'block');$('#editEmp').css('display', '');$($('#editEmp').prev().prev()).css('display', '')}">Edit/Delete Employee</button><br>
 			<form id = "empForm" method = "post" style = "display: none;">
 				<label for="empID">Select Employee:</label><br>
