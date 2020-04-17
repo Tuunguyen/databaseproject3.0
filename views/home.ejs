@@ -172,7 +172,7 @@
             .find(':radio, :checkbox').removeAttr('checked').end()
             .find('textarea, :text, select').val('')}">Add Department</button>
 			<button type="submit" onclick = "new function(){$('#deptForm').css('display', 'block');$('#editDept').css('display', '');$($('#editDept').prev().prev()).css('display', '');}">Edit/Delete Department</button>
-			<form id = "deptForm" method = "post" style = "display: none;">
+			<form action = "/admin/editDepartment" id = "deptForm" method = "post" style = "display: none;">
 				<label for="deptID">Select Department:</label><br>
 				<select id="editDept" name="deptID" onchange = "popDept()" required>
 				  <option value=""> - </option>
