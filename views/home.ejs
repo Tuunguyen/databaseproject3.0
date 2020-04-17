@@ -79,7 +79,7 @@
 			</table><br>
 			<button type="submit" onclick = "new function(){$('#empForm').css('display', 'block');$('#editEmp').css('display', 'none');$($('#editEmp').prev().prev()).css('display', 'none');}">Add Employee</button>
 			<button type="submit" onclick = "new function(){$('#empForm').css('display', 'block');$('#editEmp').css('display', '');$($('#editEmp').prev().prev()).css('display', '')}">Edit/Delete Employee</button><br>
-			<form id = "empForm" style = "display: none;">
+			<form id = "empForm" method = "post" style = "display: none;">
 				<label for="empID">Select Employee:</label><br>
 				<select id="editEmp" name="empID" required>
 				  <option value=""> - </option>
@@ -120,7 +120,7 @@
 			</table><br>
 			<button type="submit" onclick = "new function(){$('#projForm').css('display', 'block');$('#editProj').css('display', 'none');$($('#editProj').prev().prev()).css('display', 'none');}">Add Project</button>
 			<button type="submit" onclick = "new function(){$('#projForm').css('display', 'block');$('#editProj').css('display', '');$($('#editProj').prev().prev()).css('display', '');}">Edit/Delete Project</button><br>
-			<form id = "projForm" style = "display: none;">
+			<form id = "projForm" method = "post" style = "display: none;">
 				<label for="projID">Select Project:</label><br>
 				<select id="editProj" name="projID" required>
 				  <option value=""> - </option>
@@ -158,7 +158,7 @@
 			</table><br>
 			<button type="submit" onclick = "new function(){$('#deptForm').css('display', 'block');$('#editDept').css('display', 'none');$($('#editDept').prev().prev()).css('display', 'none');}">Add Department</button>
 			<button type="submit" onclick = "new function(){$('#deptForm').css('display', 'block');$('#editDept').css('display', '');$($('#editDept').prev().prev()).css('display', '');}">Edit/Delete Department</button>
-			<form id = "deptForm" style = "display: none;">
+			<form id = "deptForm" method = "post" style = "display: none;">
 				<label for="deptID">Select Department:</label><br>
 				<select id="editDept" name="deptID" required>
 				  <option value=""> - </option>
