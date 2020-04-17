@@ -25,7 +25,7 @@
 			<p class = "pl" onclick = "loadFinances()">Finances</p>
 			<p class = "admin"onclick = "loadAdmin()" >Admin View</p>
 			<p class = "admin"onclick = 'new function(){ hideAll(1); $("#reportBlock").css("display", "block");}' >Reports</p>
-			<form method="get" action = "/index.html">
+			<form method="get" action = "/">
 				<button type="submit">Back to Login</button>
 			</form>
 		</div>
@@ -68,7 +68,7 @@
 			<select id="editDept" name="deptID2">
 				  <option value="0"> All </option>
 			</select><br>
-			<form id = "projReport" method = "post">
+			<form  action = "/reportProject" id = "projReport" method = "POST">
 				<label for="sdate1">Start Date:</label><br>
 				<input type="datetime-local" id="sDate1" name="sDate" required=""><br>
 				<label for="fdate1">End Date:</label><br>
@@ -81,7 +81,7 @@
 			<select id="editDept" name="projID2">
 				  <option value="1"> All </option>
 			</select><br>
-			<form id = "transReport" method = "post">
+			<form action = "/reportTrans"id = "transReport" method = "post">
 			<label for="sdate1">Start Date:</label><br>
 			<input type="datetime-local" id="sDate1" name="sDate" required=""><br>
 			<label for="fdate1">End Date:</label><br>

@@ -247,6 +247,62 @@ app.post('/deleteEmployee', (req, res)=> {
 	}
 })
 
+app.post('/reportProject', (req, res)=> {
+    
+    console.log(req.body);
+    res.redirect('/' + req.body.sDate + '/' + req.body.fDate + '/' + 0+ '/project');
+    
+})
+
+app.post('/reportTrans', (req, res)=> {
+    
+    console.log(req.body);
+    res.redirect('/' + req.body.sDate + '/' + req.body.fDate + '/' + 0+ '/transaction');
+})
+
+app.get('/:sDate/:fDate/:id/transaction', (req, res)=> {
+    
+    console.log(req.params);
+    var startDate = req.params.sDate;
+    var fDate = req.params.fDate;
+    var id = req.params.id;
+    console.log('getting report  -------------->');
+    var sql = 'SELECT * FROM transaction WHERE (date BETWEEN ? AND ?) AND (projectID = (SELECT projectID FROM dept_proj WHERE deptID = ?))';
+    mysqlConnection.query(sql, [startDate, fDate, id], function(err, results, fields){
+        if(!err){
+            console.log('finding report');
+            console.log(results);
+            res.json({data: results});
+            
+        }
+        else{
+            console.log(err);
+        }
+    })
+
+})
+app.get('/:sDate/:fDate/:id/project', (req, res)=> {
+    
+    console.log(req.params);
+    var startDate = req.params.sDate;
+    var fDate = req.params.fDate;
+    var id = req.params.id;
+    var close = 'CLOSED';
+    console.log('getting report for project -------------->');
+    var sql = 'SELECT * FROM projectmanagementdb.project WHERE deptID = ? AND finDate < current_date() AND status = ? AND finDate BETWEEN ? AND current_date() ORDER BY finDate ASC';
+    mysqlConnection.query(sql, [id, close,startDate], function(err, results, fields){
+        if(!err){
+            console.log('finding report for project');
+            console.log(results);
+            res.json({data: results});
+            
+        }
+        else{
+            console.log(err);
+        }
+    })
+
+})
 app.post('/changePassword', (req, res)=> {
     
     console.log(req.body);
