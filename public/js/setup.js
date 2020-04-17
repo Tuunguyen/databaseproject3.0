@@ -471,7 +471,7 @@ var loadMeetLog = function () {
 	var arr = window.location.href.split("/");
 	var id = arr[arr.length-2];
 	hideAll(0);
-		if($("#meetingLog").children().length == 1){
+		if($("#meetingLog").children().length == 1 && $("#futureMeetings").children().length == 1){
 			$.getJSON('/' + id + '/meetings2.json', function(js) {  //return json of array of all meetings with project ID, ordered from oldest date to newest
 					var today = new Date();
 					$.each( js.data, function( n, meeting){
@@ -502,7 +502,6 @@ var loadMeeting = function (div){
 		$.getJSON('/' + id + '/meetings2.json', function(js) { // return json of all task tuples with selected project id
 				$.each( js.data, function(n, meet) {
 					if(meet.meetingID == div){
-						console.log("meet");
 						$("#date").attr("value",meet.date.slice(0,-1)); 
 						$("#notes").html(meet.notes);
 						$("#meetingID").attr("value", meet.meetingID);
@@ -513,8 +512,9 @@ var loadMeeting = function (div){
 			  .done( function(){
 					$.getJSON('/' + id +'/meetRelation', function(js) {
 						$.each( js.data, function( n, dpRelation){
-							if($("#meetingID").attr("value") == dpRelation.meetingID){
-								$("#empList").html($("#empLlist").html() + dpRelation.empID + ",");
+							if(div == dpRelation.meetingID){
+								console.log(div + "-" + dpRelation.empID);
+								$("#empListForm").attr("value", $("#empListForm").html() + dpRelation.empID + ",");
 							}
 						})
 					})
@@ -528,7 +528,8 @@ var loadMeeting = function (div){
 		$("#editMeetBlock").css("display", "block");
 	}
 	else{
-		$("date").attr("value",""); 
+		$("#date").attr("value", ""); 
+		$("#empListForm").attr("value", "");
 		$("#notes").html("Enter notes here...");
 		$("#meetingID").attr("value", "1");
 		$("#editMeetBlock").css("display", "none");
@@ -641,13 +642,15 @@ var popDept = function(){
             .find('textarea, :text, select, input[type=datetime-local]').val('')
 		return;
 	}
-	$($(empForm)[1]).attr("value", "1");
+	$($(empForm)[1]).attr("value", "");
 	$($(empForm)[2]).attr("value", $($("#" + $("#editDept").children("option:selected").val() + "-row").children()[4]).html().slice(1));
 	$($(empForm)[2]).attr("readonly", "");
+	$("#deptIDForm").attr("value", "1");
 	$.getJSON('/' + id + '/deptList', function(js) {
 		$.each( js.data, function( n, dept){
 			if( dept.deptID == $("#editDept").children("option:selected").val()){
 				$($(empForm)[0]).attr("value", dept.deptHead);
+					$("#deptIDForm").attr("value", dept.deptID);
 			}
 		});
 	})
