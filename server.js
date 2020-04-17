@@ -244,6 +244,85 @@ app.post('/deleteEmployee', (req, res)=> {
 	}
 })
 
+app.post('/changePassword', (req, res)=> {
+    
+    console.log(req.body);
+    var email = req.body.email;
+    if(email === ''){
+        if(req.body.passwordCurr === '' || req.body.passwordNew === ''){
+            console.log('passwords are empty strings');
+            res.status(404).send('current password or new pass can not be empty');
+        }
+        else{
+            var empID = req.body.empIDForm;
+            var password = req.body.passwordNew;
+            console.log('creating changing  employee password only------------------------------------------');
+            var sql = "UPDATE projectmanagementdb.employee SET password = ? WHERE empID = ?";
+         
+            mysqlConnection.query(sql, [password, empID], function(err, results, fields){
+                if(err)
+                {
+                    console.log(err);
+                }
+                else{
+                    console.log('updated new password ------------------------------>');
+                    console.log(results);
+                    
+                    res.redirect('back');
+                }
+    
+            })
+
+        }
+    }
+    else{
+        
+        var empID = req.body.empIDForm;
+        var password = req.body.passwordNew;
+        if(password === ''){
+            console.log('creating changing  employee email only------------------------------------------');
+            var sql = "UPDATE projectmanagementdb.employee SET email = ? WHERE empID = ?";
+         
+            mysqlConnection.query(sql, [email, empID], function(err, results, fields){
+                if(err)
+                {
+                    console.log(err);
+                }
+                else{
+                    console.log('updated new password ------------------------------>');
+                    console.log(results);
+                    
+                    res.redirect('back');
+                }
+    
+            })
+        }
+        else{
+            var empID = req.body.empIDForm;
+            var password = req.body.passwordNew;
+            console.log('creating changing  employee email && password -----------------------------------------');
+            var sql = "UPDATE projectmanagementdb.employee SET email = ?, password = ? WHERE empID = ?";
+         
+            mysqlConnection.query(sql, [email, password, empID], function(err, results, fields){
+                if(err)
+                {
+                    console.log(err);
+                }
+                else{
+                    console.log('updated new password  && email------------------------------>');
+                    console.log(results);
+                    
+                    res.redirect('back');
+                }
+    
+            })
+
+        }
+
+    }
+   
+})
+
 app.post('/admin/editDepartment', (req, res)=> {
     var departmentID = req.body.deptIDForm;
    
