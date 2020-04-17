@@ -130,7 +130,7 @@
             .find(':radio, :checkbox').removeAttr('checked').end()
             .find('textarea, :text, select').val('')}">Add Project</button>
 			<button type="submit" onclick = "new function(){$('#projForm').css('display', 'block');$('#editProj').css('display', '');$($('#editProj').prev().prev()).css('display', '');}">Edit/Delete Project</button><br>
-			<form id = "projForm" method = "post" style = "display: none;">
+			<form action = "/editProjects" id = "projForm" method = "POST" style = "display: none;">
 				<label for="projID">Select Project:</label><br>
 				<select id="editProj" name="projID" onchange = "popProj()" required>
 				  <option value=""> - </option>
