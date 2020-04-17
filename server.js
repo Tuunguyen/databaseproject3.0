@@ -331,7 +331,7 @@ app.get('/:id/empList', (req, res)=> {
 
 app.get('/:id/projList', (req, res)=> {
     var searchID = req.params.id;
-    var sql = 'SELECT * FROM projectmanagementdb.project ORDER BY startDate DESC';
+    var sql = 'SELECT * FROM projectmanagementdb.project ORDER BY status DESC, startDate DESC';
     mysqlConnection.query(sql, [searchID], function(err, results, fields){
         if(!err){
             console.log(results);

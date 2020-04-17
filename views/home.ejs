@@ -63,7 +63,7 @@
 		</div>
 		<div id="adminBlock" style = "display: none;">
 			<h1>Admin View</h1>
-			<h2 style = "pointer-events: none;"  >Employee List:   <button type="submit" onclick = "collExp()">Collapse/Expand</button></h2>
+			<h2 style = "pointer-events: none;"  >Employee List:   <button type="submit" onclick = "collExp(empList)" style = "pointer-events: auto;" >Collapse/Expand</button></h2>
 			<table style="width:100%" id="empList" >
 			  <tr>
 				<th class = "topTable" >First Name</th>
@@ -77,9 +77,13 @@
 				<th class = "topTable"  >Employee Type</th>
 			  </tr>
 			</table><br>
-			<button type="submit" onclick = "new function(){$('#empForm').css('display', 'block');}">Add Employee</button>
-			<button type="submit" onclick = "new function(){}">Edit/Delete Employee</button><br>
+			<button type="submit" onclick = "new function(){$('#empForm').css('display', 'block');$('#editEmp').css('display', 'none');$($('#editEmp').prev().prev()).css('display', 'none');}">Add Employee</button>
+			<button type="submit" onclick = "new function(){$('#empForm').css('display', 'block');$('#editEmp').css('display', '');$($('#editEmp').prev().prev()).css('display', '')}">Edit/Delete Employee</button><br>
 			<form id = "empForm" style = "display: none;">
+				<label for="empID">Select Employee:</label><br>
+				<select id="editEmp" name="empID" required>
+				  <option value=""> - </option>
+				</select><br>
 				<label for="fname">First Name:</label><br>
 				<input type="text" id="fname" name="fname" required=""><br>
 				<label for="mname">Middle Name:</label><br>
@@ -95,8 +99,9 @@
 				<input type="radio" id="hourly" name="salOrHour" value="Hourly">
 				<label for="Hourly" required="">Hourly</label><br>
 				<input type="submit" value="Submit">
+				<input type="submit" value="Delete Employee">
 			</form>
-			<h2 style = "pointer-events: none;" >Project List:   <button type="submit" onclick = "collExp()">Collapse/Expand</button></h2>
+			<h2 style = "pointer-events: none;" >Project List:   <button type="submit" onclick = "collExp(projList)" style = "pointer-events: auto;" >Collapse/Expand</button></h2>
 			<table style="width:100%" id="projList" >
 			  <tr>
 				<th class = "topTable" >Project ID</th>
@@ -113,9 +118,13 @@
 				<th class = "topTable"  >Status</th>
 			  </tr>
 			</table><br>
-			<button type="submit" onclick = "new function(){$('#projForm').css('display', 'block');}">Add Project</button>
-			<button type="submit" onclick = "new function(){}">Edit/Delete Project</button><br>
+			<button type="submit" onclick = "new function(){$('#projForm').css('display', 'block');$('#editProj').css('display', 'none');$($('#editProj').prev().prev()).css('display', 'none');}">Add Project</button>
+			<button type="submit" onclick = "new function(){$('#projForm').css('display', 'block');$('#editProj').css('display', '');$($('#editProj').prev().prev()).css('display', '');}">Edit/Delete Project</button><br>
 			<form id = "projForm" style = "display: none;">
+				<label for="projID">Select Project:</label><br>
+				<select id="editProj" name="projID" required>
+				  <option value=""> - </option>
+				</select><br>
 				<label for="title">Project Name:</label><br>
 				<input type="text" id="title" name="title" required=""><br>
 				<label for="overview">Overview:</label><br>
@@ -135,8 +144,9 @@
 				<label for="estTime">Estimated Time: </label><br>
 				<input type="text" id="estTime" name="estTime"><br>
 				<input type="submit" value="Submit">
+				<input type="submit" value="Delete Project">
 			</form>
-			<h2 style = "pointer-events: none;" >Department List:   <button type="submit" onclick = "collExp()">Collapse/Expand</button></h2>
+			<h2 style = "pointer-events: none;" >Department List:   <button type="submit" onclick = "collExp(deptList)" style = "pointer-events: auto;" >Collapse/Expand</button></h2>
 			<table style="width:100%" id="deptList" >
 			  <tr>
 				<th class = "topTable" >Department ID</th>
@@ -146,9 +156,13 @@
 				<th class = "topTable" >Current Balance</th>
 			  </tr>
 			</table><br>
-			<button type="submit" onclick = "new function(){$('#deptForm').css('display', 'block');}">Add Department</button>
-			<button type="submit" onclick = "new function(){}">Edit/Delete Department</button>
+			<button type="submit" onclick = "new function(){$('#deptForm').css('display', 'block');$('#editDept').css('display', 'none');$($('#editDept').prev().prev()).css('display', 'none');}">Add Department</button>
+			<button type="submit" onclick = "new function(){$('#deptForm').css('display', 'block');$('#editDept').css('display', '');$($('#editDept').prev().prev()).css('display', '');}">Edit/Delete Department</button>
 			<form id = "deptForm" style = "display: none;">
+				<label for="deptID">Select Department:</label><br>
+				<select id="editDept" name="deptID" required>
+				  <option value=""> - </option>
+				</select><br>
 				<label for="deptHead">Department Head:</label><br>
 				<input type="text" id="deptHead" name="deptHead" required=""><br>
 				<label for="employeeList">Employee List:</label><br>
@@ -156,6 +170,7 @@
 				<label for="deptBal">Current Balance:</label><br>
 				<input type="text" id="deptBal" name="deptBal"><br>
 				<input type="submit" value="Submit">
+				<input type="submit" value="Delete Department">
 			</form>
 			
 		</div>

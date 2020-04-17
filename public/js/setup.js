@@ -21,7 +21,6 @@ var checkLogIn = function () {
 			  if(js.data != null){
 				  $("#ifNoProj").remove();
 			  }
-			  console.log(js.data);
 			  $.each( js.data, function( id, project){
 				var m = (project.finDate).split('-');
 				$("#projects").append(
@@ -236,11 +235,13 @@ var loadAdmin = function (){
 	var arr = window.location.href.split("/");
 	var id = arr[arr.length-2];
 	hideAll(1);
-		if($("#empList").children().length == 1){
+		if($("#empList").children("tbody").children().length == 1){
 			$.getJSON('/' + id +'/deptList', function(js) {
 				$.each( js.data, function( n, dept){
                   $("#deptList").append(
 				  	'<tr><th>' + dept.deptID + '</th><th class = "empRename" >'+ dept.deptHead + '</th><th class = "empRename" id = "'+ dept.deptID +'-empList"></th><th class = "projRename" id = "'+ dept.deptID +'-projList"></th><th>$'+ dept.current_balance +'</th></tr>');
+				  $("#editDept").append(
+					'<option value="' + dept.deptID + '">' + dept.deptID + '</option>');
 				})
             })
 				.done( function(){
@@ -268,12 +269,14 @@ var loadAdmin = function (){
 									})
 								  $("#projList").append(
 								'<tr><th>' + project.projectID + '</th><th> ' + project.title + '</th><th>' + project.deptID +'</th><th class = "empRename">'+ project.projectLead +'</th><th class = "empRename" id = "' + project.projectID + '-list"></th><th>'+ a[1] + "/" + a[2].substring(0,2) + "/" + a[0] +'</th><th>'+ b[1] + "/" + b[2].substring(0,2) + "/" + b[0] +'</th><th>$' + project.budget +'</th><th>$'+ project.current_balance +'</th><th>' + project.estTime + ' hrs.</th><th>' + project.timeTotal + ' hrs.</th><th>' + project.status + '</th></tr>');
+								  $("#editProj").append(
+											  '<option value="' + project.projectID + '">' + project.title + '</option>');
 								})
 								$.each( $(".projRename"), function( n, idHTML){
 									$(idHTML).html($(idHTML).html().slice(0,-1));
 									$(idHTML).html($(idHTML).html().replace(/,/g,", "));
 								})
-								$("#projList").css("font-size","12px");
+								$("#projList").css("font-size","11px");
 							})
 							.done( function(){
 								$.getJSON('/' + id +'/deptEmpRelation', function(js) {
@@ -305,6 +308,8 @@ var loadAdmin = function (){
 												})
 											  $("#empList").append(
 												'<tr><th>' + employee.firstName + '</th><th>' + employee.midName + '</th><th>' + employee.lastName + '</th><th class = "projList" id = "' + employee.employeeID + '-list"></th><th>$' + employee.payrate + '</th><th>' + hourOrSal(employee.hourOrSal) + '</th><th>' + c[1] + "/" + c[2].substring(0,2) + "/" + c[0] + '</th><th>' + employee.empID + '</th><th>' + employee.empType + '</th></tr>');
+											  $("#editEmp").append(
+											  '<option value="' + employee.empID + '">' + employee.lastName + ", " + employee.firstName + '</option>');
 											})
 											$.each( $(".empRename"), function( n, idHTML){
 												$(idHTML).html($(idHTML).html().slice(0,-1));
@@ -361,6 +366,7 @@ var loadProjView = function (){
 	var arr = window.location.href.split("/");
 	var id = arr[arr.length-2];
 	$.getJSON('/' + id +'/taskList.json', function(js) { // return json of all task tuples with selected project id
+		  $("#backToHome").attr("action", "/" + id + "/home");
 		  $.each( js.data, function( n, task ){
 			  var m = task.startDate.split('-');
 			$("#" + task.status).append('<div class = "task" id = "' + task.taskID + '"onclick = "loadTask(&apos;' + task.taskID+ '&apos;)" ><h3>' + task.title + '</h3><p id = "' + task.empID + '"></p><p> Start Date: ' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + ' </p><p> Tags: ' + task.tags + ' </p></div>');
@@ -406,9 +412,9 @@ var loadTask = function (div){
 						$("#title").attr("value",task.title); 
 						$("#overview2").html(task.overview);
 						$("#tags").attr("value",task.tags);
-						$("#startDate").attr("value",task.startDate);
+						$("#startDate").attr("value",task.startDate.slice(0,-1));
 						$("#estTime").attr("value",task.estTime);
-						$("#finDate").attr("value",task.finDate);
+						$("#finDate").attr("value",task.finDate.slice(0,-1));
 						$("#totalTime").attr("value",task.totalTime);
 						$("#taskID").attr("value",task.taskID);
 						$("#" + task.status + "2").attr("checked", true);
@@ -464,3 +470,11 @@ var loadMeetLog = function () {
 		$("#meetingBlock").css("display", "block");
 };
 
+var collExp = function(div){
+	if($(div).css("display") == "none"){
+		$(div).css("display", "block");
+	}
+	else{
+		$(div).css("display","none");
+	}
+};
