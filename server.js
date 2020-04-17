@@ -161,6 +161,54 @@ app.post('/editProjects', (req, res)=> {
     console.log(req.body);
     res.redirect('back');
 })
+app.post('/admin/editDepartment', (req, res)=> {
+    var departmentID = req.body.deptID;
+    console.log(req.body);
+    console.log('deleting from department ------>');
+    var sql = 'DELETE FROM projectmanagementdb.department WHERE deptID = ?';
+    mysqlConnection.query(sql, [departmentID], function(err, results, fields){
+        if(!err){
+            console.log('deleted');
+            res.redirect('back');
+            
+        }
+        else{
+            console.log(err);
+        }
+    })
+
+    
+})
+app.post('/newTrans', (req, res)=> {
+    
+    console.log(req.body);
+    console.log('creating new transaction');
+    sql = "INSERT INTO projectmanagementdb.transaction SET ?";
+    var values = {
+        transID:  Math.round(Math.random() * 99999999) + 10000000,
+        empID: req.body.payID,
+        projectID: req.body.pID,
+        payerID: req.body.payID,
+        amount: req.body.amount,
+        description: req.body.desc,
+        destination: req.body.dest,
+        date: 0000-00-00
+    };
+    mysqlConnection.query(sql, values, function(err, results, fields){
+        if(err)
+        {
+            console.log(err);
+        }
+        else{
+            console.log(results);
+            console.log('added');
+            res.redirect('back');
+        }
+
+    })
+})
+
+
 
 app.get('/:id/home', (req, res)=> {
     var searchID = req.params.id;
