@@ -24,11 +24,12 @@
 			<p id = "sm-Meetings" onclick = "loadMeeting()">Meetings</p>
 			<p class = "pl" onclick = "loadFinances()">Finances</p>
 			<p class = "admin"onclick = "loadAdmin()" >Admin View</p>
+			<p class = "admin"onclick = "loadReports()" >Reports</p>
 			<form method="get" action = "/index.html">
 				<button type="submit">Back to Login</button>
 			</form>
 		</div>
-		<div id="projectBlock">
+		<div id="projectBlock" style = "display: none;" >
 			<h1>Project List</h1>
 			<div id="projects">
 				<p id = "ifNoProj"> No projects Assigned </p>
@@ -59,6 +60,38 @@
 		<div id="acctBlock" style = "display: none;">
 			<h1>New Account Creation:</h1>
 			<div id="newAcct">
+			</div>
+		</div>
+		<div id="reportBlock" style = "display: block;"><br><br>
+			<h1>Projects Completed During Set Dates:</h1>
+			<label for="deptID2">Select Department:</label><br>
+			<select id="editDept" name="deptID2" onchange = "popDept()" required>
+				  <option value="*"> All </option>
+			</select><br>
+			<form id = "projReport" method = "post">
+				<label for="sdate1">Start Date:</label><br>
+				<input type="datetime-local" id="sDate1" name="sDate" required=""><br>
+				<label for="fdate1">End Date:</label><br>
+				<input type="datetime-local" id="fdate1" name="fDate" required=""><br>
+				<input type="submit" name="action" value="Fetch Report">
+				<input type="text" id="deptIDReport" name="deptIDReport" style = "display: none;" readonly>
+			</form>
+			<div id="report1">
+			</div>
+			<h1>Transactions made During Set Dates:</h1>
+			<label for="deptID2">Select Department:</label><br>
+			<select id="editDept" name="deptID2" onchange = "popDept()" required>
+				  <option value="*"> All </option>
+			</select><br>
+			<form id = "transReport" method = "post">
+			<label for="sdate1">Start Date:</label><br>
+			<input type="datetime-local" id="sDate1" name="sDate" required=""><br>
+			<label for="fdate1">End Date:</label><br>
+			<input type="datetime-local" id="fdate1" name="fDate" required=""><br>
+			<input type="submit" name="action" value="Fetch Report">
+			<input type="text" id="deptIDReport" name="deptIDReport" style = "display: none;" readonly>
+			</form>
+			<div id="report2">
 			</div>
 		</div>
 		<div id="adminBlock" style = "display: none;">
