@@ -194,11 +194,12 @@ app.post('/editProjects', (req, res)=> {
     }
     else{
         var projectID = req.body.projectIDForm;
-        console.log('deleting from projects ------>');
-        var sql = 'DELETE FROM projectmanagementdb.project WHERE projectID = ?';
-        mysqlConnection.query(sql, [projectID], function(err, results, fields){
+        console.log('updating projects ------>');
+        //var sql = 'DELETE FROM projectmanagementdb.project WHERE projectID = ?';
+		var sql = 'UPDATE projectmanagementdb.project SET projectLead = ?, deptID = ?, timeTotal = ?, title = ?, overview = ?, startDate = ?, finDate = ?, estTime = ?, status = ?, budget = ? WHERE projectID = ?'
+        mysqlConnection.query(sql, [req.body.projLead, req.body.deptID, req.body.estTime, req.body.title, req.body.overview, req.body.startDate, req.body.finDate, req.body.estTime, req.body.status, req.body.budget, projectID], function(err, results, fields){
             if(!err){
-                console.log('deleted projects');
+                console.log('update complete');
                 res.redirect('back');
                 
             }
@@ -213,18 +214,34 @@ app.post('/deleteEmployee', (req, res)=> {
     
     console.log(req.body);
     var empID = req.body.empIDForm;
-    console.log('deleting from employee ------>');
-    var sql = 'DELETE FROM projectmanagementdb.employee WHERE empID = ?';
-    mysqlConnection.query(sql, [empID], function(err, results, fields){
-        if(!err){
-            console.log('deleted employee');
-            res.redirect('back');
-            
-        }
-        else{
-            console.log(err);
-        }
-    })
+	if(req.body.action == "Submit"){
+		console.log('editing employee ------>');
+		var sql = 'UPDATE projectmanagementdb.employee SET firstName = ?, midName = ?, lastName = ?, deptID = ?, payrate = ?, hourOrSal = ?, empType = ? WHERE empID = ?'
+        mysqlConnection.query(sql, [req.body.fname, req.body.mname, req.body.lname, req.body.deptID, req.body.payrate, req.body.salOrHour, req.body.empType, empID], function(err, results, fields){
+            if(!err){
+                console.log('update projects');
+                res.redirect('back');
+                
+            }
+            else{
+                console.log(err);
+            }
+        })
+	}
+	else{
+		console.log('deleting from employee ------>');
+		var sql = 'DELETE FROM projectmanagementdb.employee WHERE empID = ?';
+		mysqlConnection.query(sql, [empID], function(err, results, fields){
+			if(!err){
+				console.log('deleted employee');
+				res.redirect('back');
+				
+			}
+			else{
+				console.log(err);
+			}
+		})
+	}
 })
 
 app.post('/admin/editDepartment', (req, res)=> {
@@ -257,18 +274,34 @@ app.post('/admin/editDepartment', (req, res)=> {
         })
     }
     else{
-        console.log('deleting from department ------>');
-        var sql = 'DELETE FROM projectmanagementdb.department WHERE deptID = ?';
-        mysqlConnection.query(sql, [departmentID], function(err, results, fields){
-            if(!err){
-                console.log('deleted');
-                res.redirect('back');
-                
-            }
-            else{
-                console.log(err);
-            }
-        })
+		if(req.body.action == "Submit"){
+			console.log('editing department ------>');
+			var sql = 'UPDATE projectmanagementdb.department SET deptHead = ? WHERE deptID = ?'
+			mysqlConnection.query(sql, [req.body.deptHead, departmentID], function(err, results, fields){
+				if(!err){
+					console.log('update projects');
+					res.redirect('back');
+					
+				}
+				else{
+					console.log(err);
+				}
+			})
+		}
+		else{
+			console.log('deleting from department ------>');
+			var sql = 'DELETE FROM projectmanagementdb.department WHERE deptID = ?';
+			mysqlConnection.query(sql, [departmentID], function(err, results, fields){
+				if(!err){
+					console.log('deleted');
+					res.redirect('back');
+					
+				}
+				else{
+					console.log(err);
+				}
+			})
+		}
     }
 
     
