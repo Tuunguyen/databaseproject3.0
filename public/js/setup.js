@@ -53,7 +53,7 @@ var loadProfile = function (){
 			$.getJSON('/' + id +'/profile.json', function(js) { //return json of employee tuple from their id
 					var m = (js.data[0].datePayed).split('-');
                   $("#profileInfo").append(
-				  		'<p> Employee ID: ' + js.data[0].empID + '</p><p> Department ID: ' + js.data[0].deptID + ' </p><p> Pay Rate: $' + js.data[0].payrate + '</p><p> Pay Type: ' + hourOrSal(js.data[0].hourOrSal) + ' </p><p> Last Paycheck: ' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + '</p><ul> Lead for Projects:</ul>');
+				  		'<p> Employee ID: ' + js.data[0].empID + '</p><p> Email: ' + js.data[0].email + '</p><p> Department ID: ' + js.data[0].deptID + ' </p><p> Pay Rate: $' + js.data[0].payrate + '</p><p> Pay Type: ' + hourOrSal(js.data[0].hourOrSal) + ' </p><p> Last Paycheck: ' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + '</p><ul> Lead for Projects:</ul><form method="post" action="/changePassword" ><h3>New Password:</h3><input type="text" id="empIDForm" name="empIDForm" value = "' + js.data[0].empID + '" style = "display: none;" readonly><p>Current Password:</p><input type="text" id="oldPass" name="passwordCurr"><p>New Password:</p><input type="text" id="newPass" name="passwordNew"><br><br><input type="submit" value="Set Password"></form>');
                })
 			   	.done(function() {
 				  $.getJSON('/' + id +'/homeLoad.json', function(js) { //return json of array of project tuples where employee id is in employee id list

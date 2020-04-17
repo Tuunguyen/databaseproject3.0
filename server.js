@@ -171,7 +171,7 @@ app.get('/:id/projectData.json', (req, res)=> {
 })
 app.get('/:id/profile.json', (req, res)=> {
     var searchID = req.params.id;
-    var sql = 'SELECT empID, deptID, firstName, lastName, payrate, hourOrSal, datePayed, empType FROM projectmanagementdb.employee WHERE empID= ?';
+    var sql = 'SELECT * FROM projectmanagementdb.employee WHERE empID= ?';
     mysqlConnection.query(sql, searchID, function(err, results, fields){
         if(!err){
             console.log(results);
