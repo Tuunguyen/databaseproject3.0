@@ -159,8 +159,74 @@ app.post('/updatetask', (req, res)=> {
 app.post('/editProjects', (req, res)=> {
     
     console.log(req.body);
-    res.redirect('back');
+    //res.status(204).send();
+    if(req.body.projectIDForm ===''){
+        console.log('creating new project ------------------------------------------');
+        sql = "INSERT INTO projectmanagementdb.project SET ?";
+        var values = {
+            projectID: Math.round(Math.random() * 9999999) + 1000000,
+            projectLead: req.body.projLead,
+            deptID: req.body.deptID,
+            timeTotal: req.body.estTime,
+            title: req.body.title,
+            overview: req.body.overview,
+            startDate: req.body.startDate,
+            finDate: req.body.finDate,
+            estTime: req.body.estTime,
+            status: 'OPEN',
+            budget: req.body.budget,
+            current_balance: req.body.budget
+
+        };
+        mysqlConnection.query(sql, values, function(err, results, fields){
+            if(err)
+            {
+                console.log(err);
+            }
+            else{
+                console.log('added new project ------------------------------>')
+                console.log(results);
+                
+                res.redirect('back');
+            }
+
+        })
+    }
+    else{
+        var projectID = req.body.projectIDForm;
+        console.log('deleting from projects ------>');
+        var sql = 'DELETE FROM projectmanagementdb.project WHERE projectID = ?';
+        mysqlConnection.query(sql, [projectID], function(err, results, fields){
+            if(!err){
+                console.log('deleted projects');
+                res.redirect('back');
+                
+            }
+            else{
+                console.log(err);
+            }
+        })
+
+    }
 })
+app.post('/deleteEmployee', (req, res)=> {
+    
+    console.log(req.body);
+    var empID = req.body.empIDForm;
+    console.log('deleting from employee ------>');
+    var sql = 'DELETE FROM projectmanagementdb.employee WHERE empID = ?';
+    mysqlConnection.query(sql, [empID], function(err, results, fields){
+        if(!err){
+            console.log('deleted employee');
+            res.redirect('back');
+            
+        }
+        else{
+            console.log(err);
+        }
+    })
+})
+
 app.post('/admin/editDepartment', (req, res)=> {
     var departmentID = req.body.deptID;
     console.log(req.body);
