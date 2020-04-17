@@ -65,8 +65,8 @@
 		<div id="reportBlock" style = "display: block;"><br><br>
 			<h1>Projects Completed During Set Dates:</h1>
 			<label for="deptID2">Select Department:</label><br>
-			<select id="editDept" name="deptID2" onchange = "popDept()" required>
-				  <option value="*"> All </option>
+			<select id="editDept" name="deptID2">
+				  <option value="0"> All </option>
 			</select><br>
 			<form id = "projReport" method = "post">
 				<label for="sdate1">Start Date:</label><br>
@@ -74,14 +74,12 @@
 				<label for="fdate1">End Date:</label><br>
 				<input type="datetime-local" id="fdate1" name="fDate" required=""><br>
 				<input type="submit" name="action" value="Fetch Report">
-				<input type="text" id="deptIDReport" name="deptIDReport" style = "display: none;" readonly>
+				<input type="text" id="IDReport" name="IDReport" style = "display: none;" readonly>
 			</form>
-			<div id="report1">
-			</div>
 			<h1>Transactions made During Set Dates:</h1>
-			<label for="deptID2">Select Department:</label><br>
-			<select id="editDept" name="deptID2" onchange = "popDept()" required>
-				  <option value="*"> All </option>
+			<label for="projID2">Select Project:</label><br>
+			<select id="editDept" name="projID2">
+				  <option value="1"> All </option>
 			</select><br>
 			<form id = "transReport" method = "post">
 			<label for="sdate1">Start Date:</label><br>
@@ -89,7 +87,7 @@
 			<label for="fdate1">End Date:</label><br>
 			<input type="datetime-local" id="fdate1" name="fDate" required=""><br>
 			<input type="submit" name="action" value="Fetch Report">
-			<input type="text" id="deptIDReport" name="deptIDReport" style = "display: none;" readonly>
+			<input type="text" id="IDReport2" name="IDReport" style = "display: none;" readonly>
 			</form>
 			<div id="report2">
 			</div>
