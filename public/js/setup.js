@@ -507,6 +507,7 @@ var collExp = function(div){
 var popEmp = function(){
 	var empForm = $("#empForm").children("input");
 	if($("#editEmp").children("option:selected").val() == ""){
+		$("#empIDForm").removeAttr("value");
 		$('#empForm')
             .find(':radio, :checkbox').removeAttr('checked').end()
             .find('textarea, :text, select').val('')
@@ -542,6 +543,7 @@ var popEmp = function(){
 		$($(empForm)[8]).removeAttr('checked');
 		$($(empForm)[9]).removeAttr('checked');
 	}
+	$("#empIDForm").attr("value", $($(rowInfo)[8]).html());
 };
 
 var popProj = function(){
@@ -550,6 +552,7 @@ var popProj = function(){
 		$($(empForm)[4]).removeAttr("value");
 		$($(empForm)[5]).removeAttr("value");
 		$($(empForm)[6]).removeAttr("readonly");
+		$("#projectIDForm").removeAttr("value");
 		$('#projForm')
             .find(':radio, :checkbox').removeAttr('checked').end()
             .find('textarea, :text, select, input[type=datetime-local]').val('')
@@ -567,6 +570,7 @@ var popProj = function(){
 		$($(empForm)[6]).attr("value", js.data[0].budget);
 		$($(empForm)[6]).attr("readonly", "");
 		$($(empForm)[7]).attr("value", js.data[0].estTime);
+		$("#projectIDForm").attr("value", js.data[0].projectID);
 	})
 		.done( function(){
 			$.getJSON('/' + $("#editProj").children("option:selected").val() + '/projRelation', function(js) {

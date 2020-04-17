@@ -108,6 +108,7 @@
 				<label for="projectLead" required="">Admin</label><br>
 				<input type="submit" value="Submit">
 				<input type="submit" value="Delete Employee">
+				<input type="text" id="empIDForm" name="empIDForm" style = "display: none;" readonly>
 			</form>
 			<h2 style = "pointer-events: none;" >Project List:   <button type="submit" onclick = "collExp(projList)" style = "pointer-events: auto;" >Collapse/Expand</button></h2>
 			<table style="width:100%" id="projList" >
@@ -126,7 +127,7 @@
 				<th class = "topTable"  >Status</th>
 			  </tr>
 			</table><br>
-			<button type="submit" onclick = "new function(){$('#projForm').css('display', 'block');$('#editProj').css('display', 'none');$($('#editProj').prev().prev()).css('display', 'none');$($('#projForm').children('input')[4]).removeAttr('value');$($('#projForm').children('input')[5]).removeAttr('value');$($('#projForm').children('input')[6]).removeAttr('readonly');$('#projForm')
+			<button type="submit" onclick = "new function(){$('#projForm').css('display', 'block');$('#editProj').css('display', 'none');$($('#editProj').prev().prev()).css('display', 'none');$($('#projForm').children('input')[4]).removeAttr('value');$($('#projForm').children('input')[5]).removeAttr('value');$($('#projForm').children('input')[6]).removeAttr('readonly');$('#projectIDForm').removeAttr('value');$('#projForm')
             .find(':radio, :checkbox').removeAttr('checked').end()
             .find('textarea, :text, select').val('')}">Add Project</button>
 			<button type="submit" onclick = "new function(){$('#projForm').css('display', 'block');$('#editProj').css('display', '');$($('#editProj').prev().prev()).css('display', '');}">Edit/Delete Project</button><br>
@@ -155,6 +156,7 @@
 				<input type="text" id="estTime" name="estTime"><br>
 				<input type="submit" value="Submit">
 				<input type="submit" value="Delete Project">
+				<input type="text" id="projectIDForm" name="projectIDForm" style = "display: none;" readonly>
 			</form>
 			<h2 style = "pointer-events: none;" >Department List:   <button type="submit" onclick = "collExp(deptList)" style = "pointer-events: auto;" >Collapse/Expand</button></h2>
 			<table style="width:100%" id="deptList" >
