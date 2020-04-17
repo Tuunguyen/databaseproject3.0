@@ -22,11 +22,11 @@
 			<p>Analytics</p>
 			<p class = "pl"></p>
 			<p class = "admin"></p>
-			<form method="post" action = "/home.html"> <!-- just change get to post -->
+			<form id = "backToHome" method="post" action = "/home.html"> <!-- just change get to post -->
 				<input type="text" id="empID" name="empID" style = "display: none;" required>
 				<button type="submit">Back to Home</button>
 			</form>
-			<form method="get" action = "/index.html">
+			<form method="get" action = "/">
 				<button type="submit">Back to Login</button>
 			</form>
 			
@@ -65,14 +65,14 @@
 					<input type="datetime-local" id="finDate" name="finDate" ><br>
 					<label for="totalTime">Total Completion Time: </label><br>
 					<input type="text" id="totalTime" name="totalTime"><br>
-					<input type="radio" id="open2" name="status" value="open">
-					<label for="open2" required>Open</label><br>
-					<input type="radio" id="wip2" name="status" value="wip">
-					<label for="wip2" required>Work In Progress</label><br>
-					<input type="radio" id="blocked2" name="status" value="blocked">
-					<label for="blocked2" required>Blocked</label><br>
-					<input type="radio" id="closed2" name="status" value="closed">
-					<label for="closed2" required>Closed</label><br><br><br><br><br>
+					<input type="radio" id="OPEN2" name="status" value="OPEN">
+					<label for="OPEN2" required>Open</label><br>
+					<input type="radio" id="WIP2" name="status" value="WIP">
+					<label for="WIP2" required>Work In Progress</label><br>
+					<input type="radio" id="BLOCKED2" name="status" value="BLOCKED">
+					<label for="BLOCKED2" required>Blocked</label><br>
+					<input type="radio" id="CLOSED2" name="status" value="CLOSED">
+					<label for="CLOSED2" required>Closed</label><br><br><br><br><br>
 					<input type="submit" style= "bottom: 2rem;" value="Save">
 					<input type="text" id="taskID" name="taskID" style = "display: none;" readonly>
 				</div>

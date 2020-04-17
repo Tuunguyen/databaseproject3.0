@@ -317,3 +317,66 @@ app.post('/register', (req, res)=>{
     
 })
 app.listen(port);
+
+app.get('/:id/empList', (req, res)=> {
+    var searchID = req.params.id;
+    var sql = 'SELECT * FROM projectmanagementdb.employee ORDER BY lastName';
+    mysqlConnection.query(sql, [searchID], function(err, results, fields){
+        if(!err){
+            console.log(results);
+            res.json({data: results});
+        }
+    })
+})
+
+app.get('/:id/projList', (req, res)=> {
+    var searchID = req.params.id;
+    var sql = 'SELECT * FROM projectmanagementdb.project ORDER BY status DESC, startDate DESC';
+    mysqlConnection.query(sql, [searchID], function(err, results, fields){
+        if(!err){
+            console.log(results);
+            res.json({data: results});
+        }
+    })
+})
+
+app.get('/:id/deptList', (req, res)=> {
+    var searchID = req.params.id;
+    var sql = 'SELECT * FROM projectmanagementdb.department';
+    mysqlConnection.query(sql, [searchID], function(err, results, fields){
+        if(!err){
+            console.log(results);
+            res.json({data: results});
+        }
+    })
+})
+app.get('/:id/projRelation', (req, res)=> {
+    var searchID = req.params.id;
+    var sql = 'SELECT * FROM projectmanagementdb.project_relation';
+    mysqlConnection.query(sql, [searchID], function(err, results, fields){
+        if(!err){
+            console.log(results);
+            res.json({data: results});
+        }
+    })
+})
+app.get('/:id/deptEmpRelation', (req, res)=> {
+    var searchID = req.params.id;
+    var sql = 'SELECT * FROM projectmanagementdb.dept_emp';
+    mysqlConnection.query(sql, [searchID], function(err, results, fields){
+        if(!err){
+            console.log(results);
+            res.json({data: results});
+        }
+    })
+})
+app.get('/:id/deptProjRelation', (req, res)=> {
+    var searchID = req.params.id;
+    var sql = 'SELECT * FROM projectmanagementdb.dept_proj';
+    mysqlConnection.query(sql, [searchID], function(err, results, fields){
+        if(!err){
+            console.log(results);
+            res.json({data: results});
+        }
+    })
+})

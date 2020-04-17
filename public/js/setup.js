@@ -9,7 +9,7 @@ var checkLogIn = function () {
 	  if(js.data[0].empType == "admin"){
 	  }
 	  else if(js.data[0].empType == "pl"){
-		$( ".admin" ).remove();
+		//$( ".admin" ).remove();
 	  }
 	  else{
 		$( ".admin" ).remove();
@@ -21,7 +21,6 @@ var checkLogIn = function () {
 			  if(js.data != null){
 				  $("#ifNoProj").remove();
 			  }
-			  console.log(js.data);
 			  $.each( js.data, function( id, project){
 				var m = (project.finDate).split('-');
 				$("#projects").append(
@@ -197,7 +196,7 @@ var loadFinances = function (){
 					  $.each( js.data, function( id, trans){
 						var m = (trans.date).split('-');
 						$("#finance").find("#"+ trans.projectID).append(
-						'<li id = "' + trans.transID + '">' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + ' - $' + trans.amount + ': ' + trans.description + '</li>');
+						'<li style = "pointer-events: none;" id = "' + trans.transID + '">' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + ' - $' + trans.amount + ': ' + trans.description + '</li>');
 					  });
 					})
 					.fail( function(d, textStatus, error) {
@@ -229,8 +228,123 @@ var loadNewAcct = function (){
 
 		}
 		
+		$("#acctBlock").css("display", "block");
+};
+
+var loadAdmin = function (){
+	var arr = window.location.href.split("/");
+	var id = arr[arr.length-2];
+	hideAll(1);
+		if($("#empList").children("tbody").children().length == 1){
+			$.getJSON('/' + id +'/deptList', function(js) {
+				$.each( js.data, function( n, dept){
+                  $("#deptList").append(
+				  	'<tr id = "' + dept.deptID + '-row"><th>' + dept.deptID + '</th><th class = "empRename" >'+ dept.deptHead + '</th><th class = "empRename" id = "'+ dept.deptID +'-empList"></th><th class = "projRename" id = "'+ dept.deptID +'-projList"></th><th>$'+ dept.current_balance +'</th></tr>');
+				  $("#editDept").append(
+					'<option value="' + dept.deptID + '">' + dept.deptID + '</option>');
+				})
+            })
+				.done( function(){
+					$.getJSON('/' + id +'/deptProjRelation', function(js) {
+						$.each( js.data, function( n, dpRelation){
+						  $("#" + dpRelation.deptID + "-projList").html($("#" + dpRelation.deptID + "-projList").html() + dpRelation.projectID + ",");
+						})
+					})
+					.done( function(){
+							$.getJSON('/' + id +'/projList', function(js) {
+								$.each( js.data, function( n, project){
+									var a = (project.startDate).split('-');
+									var b = (project.finDate).split('-');
+									$.each( $(".projRename"), function( n, idHTML){
+										var newHTML = "";
+										$.each( $(idHTML).html().split(","), function( n, id){
+											if(id == project.projectID){
+												newHTML += project.title + ",";
+											}
+											else if($(idHTML).html().split(",").length != n+1){
+												newHTML += id + ",";
+											}
+										})
+										$(idHTML).html(newHTML)
+									})
+								  $("#projList").append(
+								'<tr id = "' + project.projectID + '-row"><th>' + project.projectID + '</th><th> ' + project.title + '</th><th>' + project.deptID +'</th><th class = "empRename">'+ project.projectLead +'</th><th class = "empRename" id = "' + project.projectID + '-list"></th><th>'+ a[1] + "/" + a[2].substring(0,2) + "/" + a[0] +'</th><th>'+ b[1] + "/" + b[2].substring(0,2) + "/" + b[0] +'</th><th>$' + project.budget +'</th><th>$'+ project.current_balance +'</th><th>' + project.estTime + ' hrs.</th><th>' + project.timeTotal + ' hrs.</th><th>' + project.status + '</th></tr>');
+								  $("#editProj").append(
+											  '<option value="' + project.projectID + '">' + project.title + '</option>');
+								})
+								$.each( $(".projRename"), function( n, idHTML){
+									$(idHTML).html($(idHTML).html().slice(0,-1));
+									$(idHTML).html($(idHTML).html().replace(/,/g,", "));
+								})
+								$("#projList").css("font-size","11px");
+							})
+							.done( function(){
+								$.getJSON('/' + id +'/deptEmpRelation', function(js) {
+									$.each( js.data, function( n, dpRelation){
+									  $("#" + dpRelation.deptID + "-empList").html($("#" + dpRelation.deptID + "-empList").html() + dpRelation.empID + ",");
+									})
+								})
+								.done( function(){
+									$.getJSON('/' + id +'/projRelation', function(js) {
+										$.each( js.data, function( n, dpRelation){
+										  $("#" + dpRelation.projectID + "-list").html($("#" + dpRelation.projectID + "-list").html() + dpRelation.empID + ",");
+										})
+									})
+									.done( function(){
+									$.getJSON('/' + id +'/empList', function(js) {
+											$.each( js.data, function( n, employee){
+												var c = employee.datePayed.split('-');
+												$.each( $(".empRename"), function( n, idHTML){
+													var newHTML = "";
+													$.each( $(idHTML).html().split(","), function( n, id){
+														if(id == employee.empID){
+															newHTML += employee.firstName + " " + employee.lastName + ",";
+														}
+														else if($(idHTML).html().split(",").length != n+1 || $(idHTML).html().split(",").length < 2){
+															newHTML += id + ",";
+														}
+													})
+													$(idHTML).html(newHTML);
+												})
+											  $("#empList").append(
+												'<tr id = "' + employee.empID + '-row"><th>' + employee.firstName + '</th><th>' + employee.midName + '</th><th>' + employee.lastName + '</th><th>' + employee.deptID +'</th><th class = "projList" id = "' + employee.employeeID + '-list"></th><th>$' + employee.payrate + '</th><th>' + hourOrSal(employee.hourOrSal) + '</th><th>' + c[1] + "/" + c[2].substring(0,2) + "/" + c[0] + '</th><th>' + employee.empID + '</th><th>' + employee.empType + '</th></tr>');
+											  $("#editEmp").append(
+											  '<option value="' + employee.empID + '">' + employee.lastName + ", " + employee.firstName + '</option>');
+											})
+											$.each( $(".empRename"), function( n, idHTML){
+												$(idHTML).html($(idHTML).html().slice(0,-1));
+												$(idHTML).html($(idHTML).html().replace(/,/g,", "));
+											})
+										})
+									  .fail( function(d, textStatus, error) {
+										console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+										})
+									})
+								  .fail( function(d, textStatus, error) {
+									console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+									})
+								})
+							  .fail( function(d, textStatus, error) {
+								console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+								})
+							})
+						  .fail( function(d, textStatus, error) {
+							console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+							})
+						})
+				  .fail( function(d, textStatus, error) {
+					console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+					})
+				})
+				.fail( function(d, textStatus, error) {
+					console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+				})
+
+		}
+		
 		$("#adminBlock").css("display", "block");
 };
+
 
 var sendToProjectView = function(id){
 	$("#projID").attr("value", id);
@@ -251,11 +365,11 @@ var hideAll = function (m){
 var loadProjView = function (){
 	var arr = window.location.href.split("/");
 	var id = arr[arr.length-2];
-	console.log(id);
 	$.getJSON('/' + id +'/taskList.json', function(js) { // return json of all task tuples with selected project id
+		  $("#backToHome").attr("action", "/" + id + "/home");
 		  $.each( js.data, function( n, task ){
 			  var m = task.startDate.split('-');
-			$("#" + task.status).append('<div class = "task" id = "' + task.taskID + '"onclick = "loadTask(' + task.taskID+ ')" ><h3>' + task.title + '</h3><p id = "' + task.empID + '"></p><p> Start Date: ' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + ' </p><p> Tags: ' + task.tags + ' </p></div>');
+			$("#" + task.status).append('<div class = "task" id = "' + task.taskID + '"onclick = "loadTask(&apos;' + task.taskID+ '&apos;)" ><h3>' + task.title + '</h3><p id = "' + task.empID + '"></p><p> Start Date: ' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + ' </p><p> Tags: ' + task.tags + ' </p></div>');
 		  });
 	   })
 		.done(function() {
@@ -292,15 +406,15 @@ var loadTask = function (div){
 	var arr = window.location.href.split("/");
 	var id = arr[arr.length-2];
 	if($("#taskBlock").css("display") == "none"){
-		$.getJSON('json/taskList.json', function(js) { // return json of all task tuples with selected project id
+		$.getJSON('/' + id + '/taskList.json', function(js) { // return json of all task tuples with selected project id
 				$.each( js.data, function(n, task) {
-					if(task.taskID == $(div).attr("id")){
+					if(task.taskID == div){
 						$("#title").attr("value",task.title); 
 						$("#overview2").html(task.overview);
 						$("#tags").attr("value",task.tags);
-						$("#startDate").attr("value",task.startDate);
+						$("#startDate").attr("value",task.startDate.slice(0,-1));
 						$("#estTime").attr("value",task.estTime);
-						$("#finDate").attr("value",task.finDate);
+						$("#finDate").attr("value",task.finDate.slice(0,-1));
 						$("#totalTime").attr("value",task.totalTime);
 						$("#taskID").attr("value",task.taskID);
 						$("#" + task.status + "2").attr("checked", true);
@@ -314,7 +428,15 @@ var loadTask = function (div){
 		$("#taskBlock").css("display", "block");
 	}
 	else{
-		$("#taskID").attr("value","");
+		$("#title").attr("value","(Task Name)"); 
+		$("#overview2").html("");
+		$("#tags").attr("value", "");
+		$("#startDate").attr("value","");
+		$("#estTime").attr("value","");
+		$("#finDate").attr("value","");
+		$("#totalTime").attr("value", "");
+		$("#taskID").attr("value", "" );
+		$("#open2").attr("checked", true);
 		$("#taskBlock").css("display", "none");
 		
 	}
@@ -331,10 +453,10 @@ var loadMeetLog = function () {
 						var m = (meeting.date).split('-');
 						var date = new Date(m[0], m[1], m[2].substring(0,2));
 						if(today > date && !(today.getMonth() == date.getMonth() && today.getDate() == date.getDate() && today.getYear() == date.getYear())){
-							$("#meetingLog").append('<h2> Meeting on ' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + " at "+ m[2].substring(3) + '</h2><p>"' + meeting.notes + '"</p>');
+							$("#meetingLog").append('<h2> Meeting on ' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + " at "+ m[2].substring(3,8) + '</h2><p>"' + meeting.notes + '"</p>');
 						}
 						else{
-							$("#futureMeetings").append('<h2> Meeting on ' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + " at "+ m[2].substring(3) + '</h2>');
+							$("#futureMeetings").append('<h2> Meeting on ' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + " at "+ m[2].substring(3,8) + '</h2>');
 						}
 					});	
                })
@@ -348,3 +470,52 @@ var loadMeetLog = function () {
 		$("#meetingBlock").css("display", "block");
 };
 
+var collExp = function(div){
+	if($(div).css("display") == "none"){
+		$(div).css("display", "block");
+	}
+	else{
+		$(div).css("display","none");
+	}
+};
+
+var popEmp = function(){
+	var empForm = $("#empForm").children("input");
+	if($("#editEmp").children("option:selected").val() == ""){
+		$('#empForm')
+            .find(':radio, :checkbox').removeAttr('checked').end()
+            .find('textarea, :text, select').val('')
+		return;
+	}
+	var rowInfo = $("#" + $("#editEmp").children("option:selected").val() + "-row").children();
+	$($(empForm)[0]).attr("value", $($(rowInfo)[0]).html());
+	$($(empForm)[1]).attr("value", $($(rowInfo)[1]).html());
+	$($(empForm)[2]).attr("value", $($(rowInfo)[2]).html());
+	$($(empForm)[3]).attr("value", $($(rowInfo)[3]).html());
+	$($(empForm)[4]).attr("value", $($(rowInfo)[5]).html().substring(1));
+	if($($(rowInfo)[6]).html() == "Salary"){
+		$($(empForm)[6]).attr("checked", true);
+		$($(empForm)[5]).removeAttr('checked');
+	}
+	else{
+		$($(empForm)[5]).attr("checked", true);
+		$($(empForm)[6]).removeAttr('checked');
+	}
+	if($($(rowInfo)[9]).html() == "admin"){
+		console.log("admin");
+		$($(empForm)[7]).removeAttr('checked');
+		$($(empForm)[8]).removeAttr('checked');
+		$($(empForm)[9]).attr("checked", true);
+	}
+	else if($($(rowInfo)[9]).html() == "pl"){
+		console.log("pl");
+		$($(empForm)[7]).removeAttr('checked');
+		$($(empForm)[8]).attr("checked", true);
+		$($(empForm)[9]).removeAttr('checked');
+	}
+	else{
+		$($(empForm)[7]).attr("checked", true);
+		$($(empForm)[8]).removeAttr('checked');
+		$($(empForm)[9]).removeAttr('checked');
+	}
+}
