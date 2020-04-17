@@ -106,8 +106,8 @@
 				<label for="projectLead" required="">Project Lead</label><br>
 				<input type="radio" id="admin" name="empType" value="admin">
 				<label for="projectLead" required="">Admin</label><br>
-				<input type="submit" value="Submit">
-				<input type="submit" value="Delete Employee">
+				<input type="submit" name="action" value="Submit">
+				<input type="submit" name="action" value="Delete Employee">
 				<input type="text" id="empIDForm" name="empIDForm" style = "display: none;" readonly>
 			</form>
 			<h2 style = "pointer-events: none;" >Project List:   <button type="submit" onclick = "collExp(projList)" style = "pointer-events: auto;" >Collapse/Expand</button></h2>
@@ -154,8 +154,8 @@
 				<input type="text" id="budget" name="budget" required=""><br>
 				<label for="estTime">Estimated Time: </label><br>
 				<input type="text" id="estTime" name="estTime"><br>
-				<input type="submit" value="Submit">
-				<input type="submit" value="Delete Project">
+				<input type="submit" name="action" value="Submit">
+				<input type="submit" name="action" value="Delete Project">
 				<input type="text" id="projectIDForm" name="projectIDForm" style = "display: none;" readonly>
 			</form>
 			<h2 style = "pointer-events: none;" >Department List:   <button type="submit" onclick = "collExp(deptList)" style = "pointer-events: auto;" >Collapse/Expand</button></h2>
@@ -183,8 +183,8 @@
 				<input type="text" id="employeeList" name="employeeList"><br>
 				<label for="deptBal">Current Balance:</label><br>
 				<input type="text" id="deptBal" name="deptBal"><br>
-				<input type="submit" value="Submit">
-				<input type="submit" value="Delete Department">
+				<input type="submit" name="action" value="Submit">
+				<input type="submit" name="action" value="Delete Department">
 			</form>
 			
 		</div>

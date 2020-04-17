@@ -140,6 +140,26 @@ li:hover {
 	position: absolute;
 	text-align: right;
 }
+
+#center{
+	top: 5rem;
+	position: absolute;
+	text-align: center;
+}
+
+#editMeetBlock{
+	display: none;
+	  border-style: solid;
+  border-color: white;
+	background: #cfe6c4; /*light*/
+	padding: 2rem;
+	position: absolute;
+	top: 9.5rem;
+	left: 40%;
+	width: 235px;
+	height: 385px;
+}
+
 table, th, td {
   border: 1px solid black;
 }
