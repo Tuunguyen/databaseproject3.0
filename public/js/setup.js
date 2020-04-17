@@ -641,13 +641,15 @@ var popDept = function(){
             .find('textarea, :text, select, input[type=datetime-local]').val('')
 		return;
 	}
-	$($(empForm)[1]).attr("value", "1");
+	$($(empForm)[1]).attr("value", "");
 	$($(empForm)[2]).attr("value", $($("#" + $("#editDept").children("option:selected").val() + "-row").children()[4]).html().slice(1));
 	$($(empForm)[2]).attr("readonly", "");
+	$("#deptIDForm").attr("value", "1");
 	$.getJSON('/' + id + '/deptList', function(js) {
 		$.each( js.data, function( n, dept){
 			if( dept.deptID == $("#editDept").children("option:selected").val()){
 				$($(empForm)[0]).attr("value", dept.deptHead);
+					$("#deptIDForm").attr("value", dept.deptID);
 			}
 		});
 	})

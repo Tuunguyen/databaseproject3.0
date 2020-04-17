@@ -168,12 +168,12 @@
 				<th class = "topTable" >Current Balance</th>
 			  </tr>
 			</table><br>
-			<button type="submit" onclick = "new function(){$('#deptForm').css('display', 'block');$('#editDept').css('display', 'none');$($('#editDept').prev().prev()).css('display', 'none');$($('#deptForm').children('input')[2]).removeAttr('readonly');$('#deptForm')
+			<button type="submit" onclick = "new function(){$('#deptForm').css('display', 'block');$('#editDept').css('display', 'none');$($('#editDept').prev().prev()).css('display', 'none');$($('#deptForm').children('input')[2]).removeAttr('readonly');$('#deptIDForm').attr('value','1');$('#deptForm')
             .find(':radio, :checkbox').removeAttr('checked').end()
             .find('textarea, :text, select').val('')}">Add Department</button>
-			<button type="submit" onclick = "new function(){$('#deptForm').css('display', 'block');$('#editDept').css('display', '');$($('#editDept').prev().prev()).css('display', '');}">Edit/Delete Department</button>
-				<label for="deptID">Select Department:</label><br>
-				<select id="editDept" name="deptID" onchange = "popDept()" required>
+			<button type="submit" onclick = "new function(){$('#deptForm').css('display', 'block');$('#editDept').css('display', '');$($('#editDept').prev().prev()).css('display', '');}">Edit/Delete Department</button><br>
+				<label for="deptID" style = "display: none;">Select Department:</label><br>
+				<select id="editDept" style = "display: none;" name="deptID" onchange = "popDept()" required>
 				  <option value=""> - </option>
 				</select><br>
 			<form id = "deptForm" method = "post" style = "display: none;">
@@ -185,6 +185,7 @@
 				<input type="text" id="deptBal" name="deptBal"><br>
 				<input type="submit" name="action" value="Submit">
 				<input type="submit" name="action" value="Delete Department">
+				<input type="text" id="deptIDForm" name="deptIDForm" style = "display: none;" readonly>
 			</form>
 			
 		</div>
