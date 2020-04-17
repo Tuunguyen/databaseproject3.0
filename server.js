@@ -108,11 +108,11 @@ app.post('/projects', (req, res)=> {
 
 app.post('/updatetask', (req, res)=> {
     
-
+    //create  new task or update talks that are in the project
     var projectID = req.body.projectID;
 
     console.log(req.body);
-
+    //if taskID is empty then we assume its a new task
     if(req.body.taskID ===''){
             console.log('creating new');
             sql = "INSERT INTO projectmanagementdb.task SET ?";
@@ -156,6 +156,12 @@ app.post('/updatetask', (req, res)=> {
     }
     
 })
+app.post('/editProjects', (req, res)=> {
+    
+    console.log(req.body);
+    res.redirect('back');
+})
+
 app.get('/:id/home', (req, res)=> {
     var searchID = req.params.id;
     var sql = 'SELECT * FROM projectmanagementdb.employee WHERE empID = ?';
