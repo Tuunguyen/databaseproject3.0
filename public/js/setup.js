@@ -669,3 +669,28 @@ var popDept = function(){
 			console.error("getJSON failed, status: " + textStatus + ", error: "+error)
 		});
 };
+
+var updateID = function(selectDiv, idDiv){
+	$("#" + idDiv).val($("#" + selectDiv).children("option:selected").val());
+}
+
+var loadReports = function(){
+	var arr = window.location.href.split("/");
+	var id = arr[arr.length-2];
+	hideAll(1);
+	$("#reportBlock").css("display", "block");
+	$.getJSON('/' + id +'/deptList', function(js) {
+		$.each( js.data, function( n, dept){
+		  $("#selectDept").append(
+			'<option value="' + dept.deptID + '">' + dept.deptID + '</option>');
+		})
+	})
+	.done( function(){
+		$.getJSON('/' + id +'/projList', function(js) {
+			$.each( js.data, function( n, project){
+			  $("#selectProj").append(
+						  '<option value="' + project.projectID + '">' + project.title + '</option>');
+			})
+		})
+	})
+}

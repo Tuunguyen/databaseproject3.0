@@ -24,7 +24,7 @@
 			<p id = "sm-Meetings" onclick = "loadMeeting()">Meetings</p>
 			<p class = "pl" onclick = "loadFinances()">Finances</p>
 			<p class = "admin"onclick = "loadAdmin()" >Admin View</p>
-			<p class = "admin"onclick = 'new function(){ hideAll(1); $("#reportBlock").css("display", "block");}' >Reports</p>
+			<p class = "admin"onclick = 'loadReports()' >Reports</p>
 			<form method="get" action = "/">
 				<button type="submit">Back to Login</button>
 			</form>
@@ -65,7 +65,7 @@
 		<div id="reportBlock" style = "display: none;"><br><br>
 			<h1>Projects Completed During Set Dates:</h1>
 			<label for="deptID2">Select Department:</label><br>
-			<select id="editDept" name="deptID2">
+			<select id="selectDept" name="deptID2" onchange = "updateID('selectDept','IDReport')">
 				  <option value="0"> All </option>
 			</select><br>
 			<form  action = "/reportProject" id = "projReport" method = "POST">
@@ -74,20 +74,20 @@
 				<label for="fdate1">End Date:</label><br>
 				<input type="datetime-local" id="fdate1" name="fDate" required=""><br>
 				<input type="submit" name="action" value="Fetch Report">
-				<input type="text" id="IDReport" name="IDReport" style = "display: none;" readonly>
+				<input type="text" id="IDReport" name="IDReport" style = "display: none;" value = "0" readonly>
 			</form>
 			<h1>Transactions made During Set Dates:</h1>
 			<label for="projID2">Select Project:</label><br>
-			<select id="editDept" name="projID2">
+			<select id="selectProj" name="projID2" onchange = "updateID('selectProj','IDReport2')">
 				  <option value="1"> All </option>
 			</select><br>
 			<form action = "/reportTrans"id = "transReport" method = "post">
-			<label for="sdate1">Start Date:</label><br>
-			<input type="datetime-local" id="sDate1" name="sDate" required=""><br>
-			<label for="fdate1">End Date:</label><br>
-			<input type="datetime-local" id="fdate1" name="fDate" required=""><br>
+			<label for="sdate2">Start Date:</label><br>
+			<input type="datetime-local" id="sDate2" name="sDate" required=""><br>
+			<label for="fdate2">End Date:</label><br>
+			<input type="datetime-local" id="fdate2" name="fDate" required=""><br>
 			<input type="submit" name="action" value="Fetch Report">
-			<input type="text" id="IDReport2" name="IDReport" style = "display: none;" readonly>
+			<input type="text" id="IDReport2" name="IDReport" style = "display: none;" value = "1" readonly>
 			</form>
 			<div id="report2">
 			</div>

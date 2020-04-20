@@ -33,9 +33,7 @@ const options = { transports: ['websocket'], pingTimeout: 3000, pingInterval: 50
 app.get('/', (req, res)=> {
     res.sendFile(path.join(__dirname + '/public/index.html'));
 })
-app.get('/report', (req, res)=> {
-    res.sendFile(path.join(__dirname + '/public/report.html'));
-})
+
 app.post('/project.html', (req, res)=> {
     var projID = req.body.projID;
     res.redirect('/' + projID + '/project');
@@ -250,14 +248,18 @@ app.post('/deleteEmployee', (req, res)=> {
 app.post('/reportProject', (req, res)=> {
     
     console.log(req.body);
-    res.redirect('/' + req.body.sDate + '/' + req.body.fDate + '/' + 0+ '/project');
+    res.redirect('/' + req.body.sDate + '/' + req.body.fDate + '/' + req.body.IDReport + '/report');
     
 })
 
 app.post('/reportTrans', (req, res)=> {
     
     console.log(req.body);
-    res.redirect('/' + req.body.sDate + '/' + req.body.fDate + '/' + 0+ '/transaction');
+    res.redirect('/' + req.body.sDate + '/' + req.body.fDate + '/' + req.body.IDReport + '/report');
+})
+
+app.get('/:sDate/:fDate/:id/report', (req, res)=> {
+    res.sendFile(path.join(__dirname + '/public/report.html'));
 })
 
 app.get('/:sDate/:fDate/:id/transaction', (req, res)=> {
@@ -267,18 +269,36 @@ app.get('/:sDate/:fDate/:id/transaction', (req, res)=> {
     var fDate = req.params.fDate;
     var id = req.params.id;
     console.log('getting report  -------------->');
-    var sql = 'SELECT * FROM transaction WHERE (date BETWEEN ? AND ?) AND (projectID = (SELECT projectID FROM dept_proj WHERE deptID = ?))';
-    mysqlConnection.query(sql, [startDate, fDate, id], function(err, results, fields){
-        if(!err){
-            console.log('finding report');
-            console.log(results);
-            res.json({data: results});
-            
-        }
-        else{
-            console.log(err);
-        }
-    })
+	var sql;
+	if( id != "1" ){
+		sql = 'SELECT * FROM transaction WHERE (date BETWEEN ? AND ?) AND projectID = ?';
+		mysqlConnection.query(sql, [startDate, fDate, id], function(err, results, fields){
+			if(!err){
+				console.log('finding report');
+				console.log(results);
+				res.json({data: results});
+				
+			}
+			else{
+				console.log(err);
+			}
+		})
+	}
+	else{
+		sql = 'SELECT * FROM transaction WHERE (date BETWEEN ? AND ?)';
+		mysqlConnection.query(sql, [startDate, fDate], function(err, results, fields){
+			if(!err){
+				console.log('finding report for all');
+				console.log(results);
+				res.json({data: results});
+				
+			}
+			else{
+				console.log(err);
+			}
+		})
+		
+	}
 
 })
 app.get('/:sDate/:fDate/:id/project', (req, res)=> {
@@ -289,18 +309,35 @@ app.get('/:sDate/:fDate/:id/project', (req, res)=> {
     var id = req.params.id;
     var close = 'CLOSED';
     console.log('getting report for project -------------->');
-    var sql = 'SELECT * FROM projectmanagementdb.project WHERE deptID = ? AND finDate < current_date() AND status = ? AND finDate BETWEEN ? AND current_date() ORDER BY finDate ASC';
-    mysqlConnection.query(sql, [id, close,startDate], function(err, results, fields){
-        if(!err){
-            console.log('finding report for project');
-            console.log(results);
-            res.json({data: results});
-            
-        }
-        else{
-            console.log(err);
-        }
-    })
+	var sql;
+	if(id != "0"){
+		sql = 'SELECT * FROM projectmanagementdb.project WHERE deptID = ? AND finDate < ? AND status = ? AND finDate BETWEEN ? AND ? ORDER BY finDate ASC';
+		mysqlConnection.query(sql, [id, fDate, close, startDate, fDate], function(err, results, fields){
+			if(!err){
+				console.log('finding report for project');
+				console.log(results);
+				res.json({data: results});
+				
+			}
+			else{
+				console.log(err);
+			}
+		})
+	}
+	else{
+		sql = 'SELECT * FROM projectmanagementdb.project WHERE finDate < ? AND status = ? AND finDate BETWEEN ? AND ? ORDER BY finDate ASC';
+		mysqlConnection.query(sql, [fDate, close,startDate, fDate], function(err, results, fields){
+			if(!err){
+				console.log('finding report for all project');
+				console.log(results);
+				res.json({data: results});
+				
+			}
+			else{
+				console.log(err);
+			}
+		})
+	}
 
 })
 app.post('/changePassword', (req, res)=> {
