@@ -31,5 +31,5 @@ jobs:
       with:
         app-name: 'donein5days'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_9c013ea3d98745be9f432c56568087d9 }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_2f2d94f62e764293bdcc6527c3f52bf8 }}
         package: .
