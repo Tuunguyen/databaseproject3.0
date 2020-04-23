@@ -1,6 +1,7 @@
+var arr = window.location.href.split("/");
+var id = arr[arr.length-2];
+
 var checkLogIn = function () {
-	var arr = window.location.href.split("/");
-	var id = arr[arr.length-2];
 	$.getJSON('/' + id +'/profile.json', function(js) { //return json of employee tuple from their id 
 	  $('#id').attr("id", js.data[0].empID);
 	  $('#employeeID').attr("value", js.data[0].empID);
@@ -46,8 +47,6 @@ var hourOrSal = function (binary){
 };
 
 var loadProfile = function (){
-	var arr = window.location.href.split("/");
-	var id = arr[arr.length-2];
 	hideAll(1);
 		if($("#profileInfo").children().length == 0){
 			$.getJSON('/' + id +'/profile.json', function(js) { //return json of employee tuple from their id
@@ -78,8 +77,6 @@ var loadProfile = function (){
 };
 
 var loadDueToday = function (){
-	var arr = window.location.href.split("/");
-	var id = arr[arr.length-2];
 	var today = new Date();
 	var n = (today.toString()).split(" ");
 	var isEmpty = true;
@@ -126,8 +123,7 @@ var loadDueToday = function (){
 };
 
 var loadMeeting = function () {
-	var arr = window.location.href.split("/");
-	var id = arr[arr.length-2];
+	console.log("hello");
 	hideAll(1);
 		if($("#meetingBlock").children().length == 5){
 			$.getJSON('/' + id + '/meetings.json', function(js) {  //return json of array of all meetings with employees ID inside its empID list ordered from oldest date to newest
@@ -178,15 +174,13 @@ var loadMeeting = function () {
 };
 
 var loadFinances = function (){
-	var arr = window.location.href.split("/");
-	var id = arr[arr.length-2];
 	hideAll(1);
 		if($("#finance").children().length == 0){
 			$.getJSON('/' + id +'/homeLoad.json', function(js) {  //return json of array of project tuples where employee id is in employee id list
 					$.each( js.data, function( n, project){
 						if($("#finance").find("#"+ project.projectID + "2").length == 0 & project.projectLead == $($("#profile").children()[0]).attr("id")){
 							$("#finance").append(
-							'<h2 onclick = "sendToProjectView(' + project.projectID + '2)" >' + project.title + '</h2><p>Budget: $' + project.budget + '</p><p>Current Balance: $' + project.current_balance + '</p><h3>Last 3 Transactions:</h3><div id = "' + project.projectID + '"></div><button type="submit" onclick = "new function(){$(&quot;#form-' + project.projectID + '&quot;).css(&quot;display&quot;, &quot;block&quot;);}">New Transaction</button><form id = "form-'+ project.projectID +'" style = "display: none;" action = "/newTrans" method = "post"><h3> New Project Transaction </h3><label for="pID">Project ID:</label><br><input type="text" id="pID" name="pID" value = "'+ project.projectID +'" readonly><br><label for="payID">Employee ID:</label><br><input type="text" id="payID" name="payID" value = "' + $("#profile").children("p").attr("id") + '" readonly><br><label for="amount">Amount: (use negative if withdrawl)</label><br><input type="text" id="amount" name="amount" required><br><label for="desc">Description:</label><br><textarea type="text" id="desc" name="desc" rows = 3 required></textarea><br><label for="dest">Destination: </label><br><input type="text" id="dest" name="dest" required><br><button type="submit">Submit</button></form>');
+							'<h2 onclick = "sendToProjectView(' + project.projectID + '2)" >' + project.title + '</h2><p>Budget: $' + project.budget + '</p><p>Current Balance: $' + project.current_balance + '</p><h3>Last 3 Transactions:</h3><div id = "' + project.projectID + '"></div><button type="submit" onclick = "new function(){$(&quot;#form-' + project.projectID + '&quot;).css(&quot;display&quot;, &quot;block&quot;);}">New Transaction</button><form id = "form-'+ project.projectID +'" style = "display: none;" action = "/newTrans" method = "post"><h3> New Project Transaction </h3><label for="pID">Project ID:</label><br><input type="text" id="pID" name="pID" value = "'+ project.projectID +'" readonly><br><label for="payID">Employee ID:</label><br><input type="text" id="payID" name="payID" value = "' + $("#profile").children("p").attr("id") + '" readonly><br><label for="amount">Amount: (use negative if withdrawl)</label><br><input type="text" id="amount" name="amount" required><br><label for="desc">Description:</label><br><textarea type="text" id="desc" name="desc" rows = 3 required></textarea><br><label for="dest">Destination: </label><br><input type="text" id="dest" name="dest" required><br><label for="transDate">Date: </label><br><input type="date" id="transDate" name="date"><br><button type="submit">Submit</button></form>');
 						}
 					});	
                })
@@ -213,8 +207,6 @@ var loadFinances = function (){
 };
 
 var loadNewAcct = function (){
-	var arr = window.location.href.split("/");
-	var id = arr[arr.length-2];
 	hideAll(1);
 		if($("#newAcct").children().length == 0){
 			$.getJSON('/' + id +'/profile.json', function(js) { //return json of employee tuple from their id 
@@ -231,16 +223,14 @@ var loadNewAcct = function (){
 };
 
 var loadAdmin = function (){
-	var arr = window.location.href.split("/");
-	var id = arr[arr.length-2];
 	hideAll(1);
 		if($("#empList").children("tbody").children().length == 1){
 			$.getJSON('/' + id +'/deptList', function(js) {
 				$.each( js.data, function( n, dept){
                   $("#deptList").append(
-				  	'<tr id = "' + dept.deptID + '-row"><th>' + dept.deptID + '</th><th class = "empRename" >'+ dept.deptHead + '</th><th class = "empRename" id = "'+ dept.deptID +'-empList"></th><th class = "projRename" id = "'+ dept.deptID +'-projList"></th><th>$'+ dept.current_balance +'</th></tr>');
+				  	'<tr id = "' + dept.deptID + '-row"><th>' + dept.deptID + '</th><th>' + dept.deptName + '</th><th class = "empRename" >'+ dept.deptHead + '</th><th class = "empRename" id = "'+ dept.deptID +'-empList"></th><th class = "projRename" id = "'+ dept.deptID +'-projList"></th><th>$'+ dept.current_balance +'</th></tr>');
 				  $("#editDept").append(
-					'<option value="' + dept.deptID + '">' + dept.deptID + '</option>');
+					'<option value="' + dept.deptID + '">' + dept.deptName + '</option>');
 				})
             })
 				.done( function(){
@@ -371,8 +361,6 @@ var sendToProjectView = function(id){
 };
 
 var hideAll = function (m){
-	var arr = window.location.href.split("/");
-	var id = arr[arr.length-2];
 	var divs = $("body").children("div");
 	$.each(divs, function( n, block ){
 		if(n > m){
@@ -382,8 +370,6 @@ var hideAll = function (m){
 };
 
 var loadProjView = function (){
-	var arr = window.location.href.split("/");
-	var id = arr[arr.length-2];
 	$.getJSON('/' + id +'/taskList.json', function(js) { // return json of all task tuples with selected project id
 		  $("#backToHome").attr("action", "/" + id + "/home");
 		  $.each( js.data, function( n, task ){
@@ -423,8 +409,6 @@ var loadProjView = function (){
 };
 
 var loadTask = function (div){
-	var arr = window.location.href.split("/");
-	var id = arr[arr.length-2];
 	if($("#taskBlock").css("display") == "none"){
 		$.getJSON('/' + id + '/taskList.json', function(js) { // return json of all task tuples with selected project id
 				$.each( js.data, function(n, task) {
@@ -467,8 +451,6 @@ var loadTask = function (div){
 };
 
 var loadMeetLog = function () {
-	var arr = window.location.href.split("/");
-	var id = arr[arr.length-2];
 	hideAll(0);
 		if($("#meetingLog").children().length == 1 && $("#futureMeetings").children().length == 1){
 			$.getJSON('/' + id + '/meetings2.json', function(js) {  //return json of array of all meetings with project ID, ordered from oldest date to newest
@@ -495,8 +477,6 @@ var loadMeetLog = function () {
 };
 
 var loadMeeting = function (div){
-	var arr = window.location.href.split("/");
-	var id = arr[arr.length-2];
 	if($("#editMeetBlock").css("display") == "none"){
 		$.getJSON('/' + id + '/meetings2.json', function(js) { // return json of all task tuples with selected project id
 				$.each( js.data, function(n, meet) {
@@ -611,6 +591,14 @@ var popProj = function(){
 		$($(empForm)[6]).attr("value", js.data[0].budget);
 		$($(empForm)[6]).attr("readonly", "");
 		$($(empForm)[7]).attr("value", js.data[0].estTime);
+		if(js.data[0].status == "OPEN"){
+			$($(empForm)[8]).attr("checked", true);
+			$($(empForm)[9]).removeAttr('checked');
+		}
+		else{
+			$($(empForm)[9]).attr("checked", true);
+			$($(empForm)[8]).removeAttr('checked');
+		}
 		$("#projectIDForm").attr("value", js.data[0].projectID);
 	})
 		.done( function(){
@@ -631,8 +619,6 @@ var popProj = function(){
 };
 
 var popDept = function(){
-	var arr = window.location.href.split("/");
-	var id = arr[arr.length-2];
 	var empForm = $("#deptForm").children("input");
 	if($("#editDept").children("option:selected").val() == ""){
 		$($(empForm)[2]).removeAttr("readonly");
@@ -641,15 +627,16 @@ var popDept = function(){
             .find('textarea, :text, select, input[type=datetime-local]').val('')
 		return;
 	}
-	$($(empForm)[1]).attr("value", "");
-	$($(empForm)[2]).attr("value", $($("#" + $("#editDept").children("option:selected").val() + "-row").children()[4]).html().slice(1));
-	$($(empForm)[2]).attr("readonly", "");
+	$($(empForm)[2]).attr("value", "");
+	$($(empForm)[3]).attr("value", $($("#" + $("#editDept").children("option:selected").val() + "-row").children()[5]).html().slice(1));
+	$($(empForm)[4]).attr("readonly", "");
 	$("#deptIDForm").attr("value", "1");
 	$.getJSON('/' + id + '/deptList', function(js) {
 		$.each( js.data, function( n, dept){
 			if( dept.deptID == $("#editDept").children("option:selected").val()){
-				$($(empForm)[0]).attr("value", dept.deptHead);
-					$("#deptIDForm").attr("value", dept.deptID);
+				$($(empForm)[1]).attr("value", dept.deptHead);
+				$("#deptIDForm").attr("value", dept.deptID);
+				$($(empForm)[0]).attr("value", dept.deptName);
 			}
 		});
 	})
@@ -657,7 +644,7 @@ var popDept = function(){
 			$.getJSON('/' + id + '/deptEmpRelation', function(js) {
 				$.each( js.data, function( n, dpRelation){
 					if( dpRelation.deptID == $("#editDept").children("option:selected").val()){
-						$($(empForm)[1]).attr("value", $($(empForm)[1]).attr("value") + dpRelation.empID + ", ");
+						$($(empForm)[2]).attr("value", $($(empForm)[2]).attr("value") + dpRelation.empID + ", ");
 					}
 				});
 			})
@@ -675,8 +662,6 @@ var updateID = function(selectDiv, idDiv){
 }
 
 var loadReports = function(){
-	var arr = window.location.href.split("/");
-	var id = arr[arr.length-2];
 	hideAll(1);
 	$("#reportBlock").css("display", "block");
 	$.getJSON('/' + id +'/deptList', function(js) {

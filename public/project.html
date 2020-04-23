@@ -6,6 +6,7 @@
 		<meta name="keywords" content="" />
 		<link rel="stylesheet" href="/style.css">
 		<script src="/jquery.min.js"></script>
+		<script src="https://d3js.org/d3.v5.min.js"></script>
 		<script src="/setup.js"></script>
 		<script>
 			loadProjView();
@@ -20,7 +21,7 @@
 			<p onclick = 'new function(){$("#taskBlock").css("display", "block");}'>Add New Task</p>
 			<p onclick = 'new function(){$("#editMeetBlock").css("display", "block");}'>Organize a Meeting</p>
 			<p class = "pl" onclick = "loadMeetLog()">Meeting Log</p>
-			<p>Analytics</p>
+			<p style = "display: none;">Analytics</p>
 			<p class = "pl"></p>
 			<p class = "admin"></p>
 			<form id = "backToHome" method="post" action = "/home.html">
@@ -32,7 +33,7 @@
 			</form>
 			
 		</div>
-		<div id="projectBlock" style = "display: block;">
+		<div id="projectBlock">
 			<h1 id = "projectName">Project List</h1>
 			<div class="row">
 				<div class="column" id = "OPEN">
@@ -113,5 +114,6 @@
 			<div id = "analytics">
 			</div>
 		</div>
+		<script src="/analytics.js"></script>
 	</body>
 </html>

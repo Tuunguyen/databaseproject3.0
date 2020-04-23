@@ -63,6 +63,14 @@
 				$("#report1Head").removeAttr("style");
 			})
 		  .done(function() {
+				$.getJSON('/' + id +'/projRelation', function(js) {
+					$.each( js.data, function( n, dpRelation){
+					  $("#" + dpRelation.projectID + "-list").html($("#" + dpRelation.projectID + "-list").html() + dpRelation.empID + ",");
+					})
+				})
+				.fail( function(d, textStatus, error) {
+					console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+				})
 		  })
 		  .fail( function(d, textStatus, error) {
 			console.error("getJSON failed, status: " + textStatus + ", error: "+error)

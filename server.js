@@ -22,6 +22,10 @@ app.get('/style.css', function(req, res) {
 app.get('/setup.js', function(req, res) {
     res.sendFile(__dirname + "/public/js/" + "setup.js");
   });
+  
+ app.get('/analytics.js', function(req, res) {
+    res.sendFile(__dirname + "/public/js/" + "analytics.js");
+  });
 app.get('/jquery.min.js', function(req, res) {
     res.sendFile(__dirname + "/public/js/" + "jquery.min.js");
   });
@@ -160,7 +164,6 @@ app.post('/updatetask', (req, res)=> {
 app.post('/editProjects', (req, res)=> {
     
     console.log(req.body);
-    //res.status(204).send();
     if(req.body.projectIDForm ===''){
         console.log('creating new project ------------------------------------------');
         sql = "INSERT INTO projectmanagementdb.project SET ?";
@@ -187,21 +190,36 @@ app.post('/editProjects', (req, res)=> {
             else{
                 console.log('added new project ------------------------------>')
                 console.log(results);
-                
-                res.redirect('back');
+				
+                var backURL = req.header('Referer') || '/';
+				if(backURL.split("/")[backURL.split("/").length - 1] == "home") {
+					res.redirect(backURL + "/admin");
+				}
+				else{
+					res.redirect("back");
+				}
             }
 
         })
     }
-    else{
+    else if(req.body.action == "Submit"){
         var projectID = req.body.projectIDForm;
         console.log('updating projects ------>');
-        //var sql = 'DELETE FROM projectmanagementdb.project WHERE projectID = ?';
 		var sql = 'UPDATE projectmanagementdb.project SET projectLead = ?, deptID = ?, timeTotal = ?, title = ?, overview = ?, startDate = ?, finDate = ?, estTime = ?, status = ?, budget = ? WHERE projectID = ?'
         mysqlConnection.query(sql, [req.body.projLead, req.body.deptID, req.body.estTime, req.body.title, req.body.overview, req.body.startDate, req.body.finDate, req.body.estTime, req.body.status, req.body.budget, projectID], function(err, results, fields){
             if(!err){
                 console.log('update complete');
-                res.redirect('back');
+				var str = req.body.empListForm.replace(/\s+/g, '');
+				str = str.split(",");
+				console.log(str);
+				
+				var backURL = req.header('Referer') || '/';
+                if(backURL.split("/")[backURL.split("/").length - 1] == "home") {
+					res.redirect(backURL + "/admin");
+				}
+				else{
+					res.redirect("back");
+				}
                 
             }
             else{
@@ -210,6 +228,28 @@ app.post('/editProjects', (req, res)=> {
         })
 
     }
+	else{
+		console.log('deleting from project ------>');
+		var projectID = req.body.projectIDForm;
+		var sql = 'DELETE FROM projectmanagementdb.project WHERE projectID = ?';
+		mysqlConnection.query(sql, [projectID], function(err, results, fields){
+			if(!err){
+				console.log('deleted');
+				var backURL = req.header('Referer') || '/';
+				if(backURL.split("/")[backURL.split("/").length - 1] == "home") {
+					res.redirect(backURL + "/admin");
+				}
+				else{
+					res.redirect("back");
+				}
+				
+			}
+			else{
+				console.log(err);
+			}
+		})
+		
+	}
 })
 app.post('/deleteEmployee', (req, res)=> {
     
@@ -221,7 +261,13 @@ app.post('/deleteEmployee', (req, res)=> {
         mysqlConnection.query(sql, [req.body.fname, req.body.mname, req.body.lname, req.body.deptID, req.body.payrate, req.body.salOrHour, req.body.empType, empID], function(err, results, fields){
             if(!err){
                 console.log('update projects');
-                res.redirect('back');
+                var backURL = req.header('Referer') || '/';
+                if(backURL.split("/")[backURL.split("/").length - 1] == "home") {
+					res.redirect(backURL + "/admin");
+				}
+				else{
+					res.redirect("back");
+				}
                 
             }
             else{
@@ -235,7 +281,13 @@ app.post('/deleteEmployee', (req, res)=> {
 		mysqlConnection.query(sql, [empID], function(err, results, fields){
 			if(!err){
 				console.log('deleted employee');
-				res.redirect('back');
+				var backURL = req.header('Referer') || '/';
+                if(backURL.split("/")[backURL.split("/").length - 1] == "home") {
+					res.redirect(backURL + "/admin");
+				}
+				else{
+					res.redirect("back");
+				}
 				
 			}
 			else{
@@ -430,6 +482,7 @@ app.post('/admin/editDepartment', (req, res)=> {
             deptID: Math.round(Math.random() * 9999) + 1000,
             empID: req.body.deptHead,
             deptHead: req.body.deptHead,
+			deptName: req.body.deptName,
             projectID: 0 ,
             current_balance: req.body.deptBal
 
@@ -451,11 +504,17 @@ app.post('/admin/editDepartment', (req, res)=> {
     else{
 		if(req.body.action == "Submit"){
 			console.log('editing department ------>');
-			var sql = 'UPDATE projectmanagementdb.department SET deptHead = ? WHERE deptID = ?'
-			mysqlConnection.query(sql, [req.body.deptHead, departmentID], function(err, results, fields){
+			var sql = 'UPDATE projectmanagementdb.department SET deptHead = ?, deptName = ? WHERE deptID = ?'
+			mysqlConnection.query(sql, [req.body.deptHead, req.body.deptName, departmentID], function(err, results, fields){
 				if(!err){
-					console.log('update projects');
-					res.redirect('back');
+					console.log('update department');
+					var backURL = req.header('Referer') || '/';
+					if(backURL.split("/")[backURL.split("/").length - 1] == "home") {
+						res.redirect(backURL + "/admin");
+					}
+					else{
+						res.redirect("back");
+					}
 					
 				}
 				else{
@@ -469,7 +528,13 @@ app.post('/admin/editDepartment', (req, res)=> {
 			mysqlConnection.query(sql, [departmentID], function(err, results, fields){
 				if(!err){
 					console.log('deleted');
-					res.redirect('back');
+					var backURL = req.header('Referer') || '/';
+					if(backURL.split("/")[backURL.split("/").length - 1] == "home") {
+						res.redirect(backURL + "/admin");
+					}
+					else{
+						res.redirect("back");
+					}
 					
 				}
 				else{
@@ -504,7 +569,13 @@ app.post('/newTrans', (req, res)=> {
         else{
             console.log(results);
             console.log('added');
-            res.redirect('back');
+            var backURL = req.header('Referer') || '/';
+			if(backURL.split("/")[backURL.split("/").length - 1] == "home") {
+				res.redirect(backURL + "/finance");
+			}
+			else{
+				res.redirect("back");
+			}
         }
 
     })
@@ -525,6 +596,35 @@ app.get('/:id/home', (req, res)=> {
         }
     })
 })
+
+app.get('/:id/home/admin', (req, res)=> {
+    var searchID = req.params.id;
+    var sql = 'SELECT * FROM projectmanagementdb.employee WHERE empID = ?';
+    mysqlConnection.query(sql, [searchID], function(err, results, fields){
+        if(!err){
+            console.log(results);
+            res.render('home.ejs', {data: results});
+        }
+        else{
+            console.log(err);
+        }
+    })
+})
+
+app.get('/:id/home/finance', (req, res)=> {
+    var searchID = req.params.id;
+    var sql = 'SELECT * FROM projectmanagementdb.employee WHERE empID = ?';
+    mysqlConnection.query(sql, [searchID], function(err, results, fields){
+        if(!err){
+            console.log(results);
+            res.render('home.ejs', {data: results});
+        }
+        else{
+            console.log(err);
+        }
+    })
+})
+
 app.get('/:id/tasks', (req, res)=> {
     var searchID = req.params.id;
     console.log('its getting task in tasks');

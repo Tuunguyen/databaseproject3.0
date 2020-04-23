@@ -23,7 +23,7 @@
 			<p id = "sm-dueToday" onclick = "loadDueToday()">Due Today</p>
 			<p id = "sm-Meetings" onclick = "loadMeeting()">Meetings</p>
 			<p class = "pl" onclick = "loadFinances()">Finances</p>
-			<p class = "admin"onclick = "loadAdmin()" >Admin View</p>
+			<p class = "admin" onclick = "loadAdmin()" >Admin View</p>
 			<p class = "admin"onclick = 'loadReports()' >Reports</p>
 			<form method="get" action = "/">
 				<button type="submit">Back to Login</button>
@@ -185,6 +185,11 @@
 				<input type="text" id="budget" name="budget" required=""><br>
 				<label for="estTime">Estimated Time: </label><br>
 				<input type="text" id="estTime" name="estTime"><br>
+				<label for="status">Status: </label><br>
+				<input type="radio" id="open" name="status" value="OPEN">
+				<label for="open" required="">Open</label><br>
+				<input type="radio" id="closed" name="status" value="CLOSED">
+				<label for="Hourly" required="">Closed</label><br>
 				<input type="submit" name="action" value="Submit">
 				<input type="submit" name="action" value="Delete Project">
 				<input type="text" id="projectIDForm" name="projectIDForm" style = "display: none;" readonly>
@@ -192,6 +197,7 @@
 			<h2 style = "pointer-events: none;" >Department List:   <button type="submit" onclick = "collExp(deptList)" style = "pointer-events: auto;" >Collapse/Expand</button></h2>
 			<table style="width:100%" id="deptList" >
 			  <tr>
+				<th class = "topTable" >Department ID</th>
 				<th class = "topTable" >Department ID</th>
 				<th class = "topTable"  >Department Head</th>
 				<th class = "topTable"  >Employee List</th>
@@ -208,6 +214,8 @@
 				  <option value=""> - </option>
 				</select><br>
 			<form  action = "/admin/editDepartment" id = "deptForm" method = "post" style = "display: none;">
+				<label for="deptName">Department:</label><br>
+				<input type="text" id="deptName" name="deptName" required=""><br>
 				<label for="deptHead">Department Head:</label><br>
 				<input type="text" id="deptHead" name="deptHead" required=""><br>
 				<label for="employeeList">Employee List:</label><br>
@@ -225,7 +233,19 @@
 			<input type="text" id="employeeID" name="employeeID" required>
 		</form>
 		<script>
-			checkLogIn();
+			if(arr[arr.length-1] == "admin"){
+				id = arr[arr.length-3];
+				checkLogIn();
+				loadAdmin();
+			}
+			if(arr[arr.length-1] == "finance"){
+				id = arr[arr.length-3];
+				checkLogIn();
+				loadFinances();
+			}
+			else{
+				checkLogIn();
+			}
 		</script>
 	</body>
 </html>
