@@ -480,12 +480,10 @@ app.post('/admin/editDepartment', (req, res)=> {
         var sql = "INSERT INTO projectmanagementdb.department SET ?";
         var values = {
             deptID: Math.round(Math.random() * 9999) + 1000,
-            empID: req.body.deptHead,
             deptHead: req.body.deptHead,
 			deptName: req.body.deptName,
             projectID: 0 ,
             current_balance: req.body.deptBal
-
         };
         mysqlConnection.query(sql, values, function(err, results, fields){
             if(err)
