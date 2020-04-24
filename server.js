@@ -742,10 +742,10 @@ app.post('/login', (req, res)=>{
         if(err)
         {
             console.log("email could not be found", err);
-            res.redirect('/');
+            res.redirect('back');
         }
         else{
-            
+           
             if(results.length>0)
             {
                 
@@ -761,9 +761,12 @@ app.post('/login', (req, res)=>{
                 }
                 else{
                     console.log("password did not match")
-                    res.redirect('/');
+                    res.redirect('back');
                 }
 
+            }
+            else{
+                res.redirect('back');
             }
             
         }
