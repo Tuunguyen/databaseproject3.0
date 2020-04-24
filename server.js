@@ -742,10 +742,7 @@ app.post('/login', (req, res)=>{
         if(err)
         {
             console.log("email could not be found", err);
-            res.end({
-                "code" : 400,
-                "failed" : "error occured"
-            })
+            res.redirect('/');
         }
         else{
             
@@ -764,10 +761,7 @@ app.post('/login', (req, res)=>{
                 }
                 else{
                     console.log("password did not match")
-                    res.send({
-                        "code": 204,
-                        "success" : "email and password does not match"
-                    })
+                    res.redirect('/');
                 }
 
             }
