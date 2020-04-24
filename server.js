@@ -559,7 +559,7 @@ app.post('/newTrans', (req, res)=> {
         amount: req.body.amount,
         description: req.body.desc,
         destination: req.body.dest,
-        date: 0000-00-00
+        date: req.body.date
     };
     mysqlConnection.query(sql, values, function(err, results, fields){
         if(err)
