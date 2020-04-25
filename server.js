@@ -161,6 +161,48 @@ app.post('/updatetask', (req, res)=> {
     }
     
 })
+
+app.post('/updatemeet', (req, res)=> {
+    
+    var projectID = req.body.projIDForm;
+
+    console.log(req.body);
+    if(req.body.meetingID ===''){
+            console.log('creating new');
+            sql = "INSERT INTO projectmanagementdb.meetings SET ?";
+            var values = {
+                meetingID: Math.round(Math.random() * 99999) + 100000,
+                projectID: projectID,
+                notes: req.body.notes,
+                date: req.body.date
+            };
+            mysqlConnection.query(sql, values, function(err, results, fields){
+                if(err)
+                {
+                    console.log(err);
+                }
+                else{
+                    console.log(results);
+                    res.redirect('back');
+                }
+
+            })
+    }
+    else{
+        sql = 'UPDATE projectmanagementdb.meetings SET notes = ?, date = ? WHERE meetingID = ?'
+        mysqlConnection.query(sql, [req.body.notes, req.body.date, req.body.meetingID], function(err,results,fields){
+            if(err)
+            {
+                console.log(err);
+            }
+            else{
+                console.log('--------------????????????????????????');
+                res.redirect('back');
+            }
+    })
+    }
+    
+})
 app.post('/editProjects', (req, res)=> {
     
     console.log(req.body);
@@ -683,7 +725,7 @@ app.get('/:id/dueToday.json', (req, res)=> {
 })
 app.get('/:id/homeLoad.json', (req, res)=> {
     var searchID = req.params.id;
-    var sql = 'SELECT projectID, projectLead, title, status, finDate, budget, current_balance FROM projectmanagementdb.project WHERE projectLead = ?';
+    var sql = 'SELECT * FROM project WHERE projectID IN (SELECT projectID FROM project_relation WHERE empID = ?)';
     mysqlConnection.query(sql,searchID, function(err, results, fields){
         if(!err){
             console.log(results);

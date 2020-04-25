@@ -394,6 +394,7 @@ var loadProjView = function (){
 				var url = window.location.href.split("/");
 				$("#empID").attr("value", url[url.length-2]);
 				$("#projectIDForm").attr("value", id);
+				$("#projIDForm").attr("value", id);
 		   })
 		   	.fail( function(d, textStatus, error) {
 				console.error("getJSON failed, status: " + textStatus + ", error: "+error)

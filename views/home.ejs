@@ -70,9 +70,9 @@
 			</select><br>
 			<form  action = "/reportProject" id = "projReport" method = "POST">
 				<label for="sdate1">Start Date:</label><br>
-				<input type="datetime-local" id="sDate1" name="sDate" required=""><br>
+				<input type="date" id="sDate1" name="sDate" required=""><br>
 				<label for="fdate1">End Date:</label><br>
-				<input type="datetime-local" id="fdate1" name="fDate" required=""><br>
+				<input type="date" id="fdate1" name="fDate" required=""><br>
 				<input type="submit" name="action" value="Fetch Report">
 				<input type="text" id="IDReport" name="IDReport" style = "display: none;" value = "0" readonly>
 			</form>
@@ -83,9 +83,9 @@
 			</select><br>
 			<form action = "/reportTrans"id = "transReport" method = "post">
 			<label for="sdate2">Start Date:</label><br>
-			<input type="datetime-local" id="sDate2" name="sDate" required=""><br>
+			<input type="date" id="sDate2" name="sDate" required=""><br>
 			<label for="fdate2">End Date:</label><br>
-			<input type="datetime-local" id="fdate2" name="fDate" required=""><br>
+			<input type="date" id="fdate2" name="fDate" required=""><br>
 			<input type="submit" name="action" value="Fetch Report">
 			<input type="text" id="IDReport2" name="IDReport" style = "display: none;" value = "1" readonly>
 			</form>
@@ -178,9 +178,9 @@
 				<label for="empListForm">Project Members:</label><br>
 				<input type="text" id="empLisFormt" name="empListForm"><br>
 				<label for="startDate">Start Date: </label><br>
-				<input type="datetime-local" id="startDate" name="startDate" required=""><br>
+				<input type="date" id="startDate" name="startDate" required=""><br>
 				<label for="finDate">Due Date:</label><br>
-				<input type="datetime-local" id="finDate" name="finDate" required=""><br>
+				<input type="date" id="finDate" name="finDate" required=""><br>
 				<label for="budget">Budget:</label><br>
 				<input type="text" id="budget" name="budget" required=""><br>
 				<label for="estTime">Estimated Time: </label><br>
