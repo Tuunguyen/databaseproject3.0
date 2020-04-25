@@ -459,10 +459,10 @@ var loadMeetLog = function () {
 						var m = (meeting.date).split('-');
 						var date = new Date(m[0], m[1], m[2].substring(0,2));
 						if(today > date && !(today.getMonth() == date.getMonth() && today.getDate() == date.getDate() && today.getYear() == date.getYear())){
-							$("#meetingLog").append('<h2 onclick="loadMeeting(&apos;' + meeting.meetingID + '&apos;);"> Meeting on ' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + " at "+ m[2].substring(3,8) + '</h2><p>"' + meeting.notes + '"</p>');
+							$("#meetingLog").append('<h2 onclick="loadMeetEdit(&apos;' + meeting.meetingID + '&apos;);"> Meeting on ' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + " at "+ m[2].substring(3,8) + '</h2><p>"' + meeting.notes + '"</p>');
 						}
 						else{
-							$("#futureMeetings").append('<h2 onclick="loadMeeting(&apos;' + meeting.meetingID + '&apos;);"> Meeting on ' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + " at "+ m[2].substring(3,8) + '</h2>');
+							$("#futureMeetings").append('<h2 onclick="loadMeetEdit(&apos;' + meeting.meetingID + '&apos;);"> Meeting on ' + m[1] + "/" + m[2].substring(0,2) + "/" + m[0] + " at "+ m[2].substring(3,8) + '</h2>');
 						}
 					});	
                })
@@ -476,7 +476,7 @@ var loadMeetLog = function () {
 		$("#meetingBlock").css("display", "block");
 };
 
-var loadMeeting = function (div){
+var loadMeetEdit = function (div){
 	if($("#editMeetBlock").css("display") == "none"){
 		$.getJSON('/' + id + '/meetings2.json', function(js) { // return json of all task tuples with selected project id
 				$.each( js.data, function(n, meet) {
