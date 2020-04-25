@@ -480,12 +480,10 @@ app.post('/admin/editDepartment', (req, res)=> {
         var sql = "INSERT INTO projectmanagementdb.department SET ?";
         var values = {
             deptID: Math.round(Math.random() * 9999) + 1000,
-            empID: req.body.deptHead,
             deptHead: req.body.deptHead,
 			deptName: req.body.deptName,
             projectID: 0 ,
             current_balance: req.body.deptBal
-
         };
         mysqlConnection.query(sql, values, function(err, results, fields){
             if(err)
@@ -559,7 +557,7 @@ app.post('/newTrans', (req, res)=> {
         amount: req.body.amount,
         description: req.body.desc,
         destination: req.body.dest,
-        date: 0000-00-00
+        date: req.body.date
     };
     mysqlConnection.query(sql, values, function(err, results, fields){
         if(err)
@@ -744,13 +742,10 @@ app.post('/login', (req, res)=>{
         if(err)
         {
             console.log("email could not be found", err);
-            res.end({
-                "code" : 400,
-                "failed" : "error occured"
-            })
+            res.redirect('back');
         }
         else{
-            
+           
             if(results.length>0)
             {
                 
@@ -766,12 +761,12 @@ app.post('/login', (req, res)=>{
                 }
                 else{
                     console.log("password did not match")
-                    res.send({
-                        "code": 204,
-                        "success" : "email and password does not match"
-                    })
+                    res.redirect('back');
                 }
 
+            }
+            else{
+                res.redirect('back');
             }
             
         }
